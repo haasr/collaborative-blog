@@ -55,7 +55,7 @@ Static files are stored in an AWS S3 bucket where a specific hierarchy of
 folders exists to serve the CSS, JavaScripts, and the many images related
 to the public pages, to posts, and to profile images. The database is configured
 to maintain a remote Postgres connection. The separation of static files and the
-datbase from the application code was inspired by my experience with developing
+database from the application code was inspired by my experience with developing
 microservices architectures. Using these external services not only allows for
 very cheap static files storage but it increases the modularity of the blog,
 making it easier to re-deploy elsewhere (without the need to roll a new database
@@ -109,7 +109,7 @@ Robustness to identify and react to failures
 When the app fails to send an email, it saves the name of the form, the to address,
 the time of the failure, and the form data which can be viewed through the
 administrative menu > Failures > Mail Send Failures (``<site_url>/admin_pages/failures/mail_send_failures/30/``).
-This page offers visualizations of instances where form data and newsletter did not
+This page offers visualizations of instances where form data and newsletters did not
 send, separately for the given number of days (default = 30: The current day and the
 previous n-1 days).
 
@@ -127,7 +127,7 @@ so the submitted form data is not just lost.
 Using another transactional email service
 -----------------------------------------
 
-I suppose the email config could be changed in ``blog/settings`` to use another
+I suppose the email config could be changed in ``blog.settings`` to use another
 transactional email service that ``django-anymail`` supports, assuming it uses
 integer IDs for its email templates (which is an integral factor in how my
 app sends form data). I do not know how rich the template languages are with other
@@ -138,7 +138,7 @@ All of that is to say, if you plan to use a service other than Sendinblue, be
 prepared to tweak the code until you are able to get it sending data that can
 be correctly parsed in your email templates, and be prepared for new exceptions,
 although many exceptions...but not all
-(see https://github.com/pinax/django-mailer/issues/73)...can be captured by setting
+( see https://github.com/pinax/django-mailer/issues/73 )...can be captured by setting
 ``fail_silently`` to ``False`` when calling the ``send`` function of a ``django.core.mail.EmailMessage``
 instance.
 
@@ -153,8 +153,7 @@ put to sleep after ~30 minutes of inactivity. That means that my scheduler
 (in ``mail_subscription/newsletters.py``) is liable to be interrupted and would not
 send newsletter emails at the appropriate time. A possible work-around would be
 to write a loop in the scheduler to make an HTTP request to an endpoint of the
-web app every 25 minutes to keep it alive. I chose not to do that since there is
-a very finite amount of requests that can be served per minute on a free tier.
+web app every 25 minutes to keep it alive. I chose not to do that for now.
 
 A developer with some Django experience could also rewrite the scheduling to
 use Django base commands along with a scheduler such as Heroku Scheduler which
