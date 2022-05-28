@@ -1,0 +1,16 @@
+{% extends "two_factor/_base_focus.html" %}
+{% load i18n %}
+
+{% block content %}
+  <h1 class="text-center">{% block title %}Reset 2FA{% endblock %}</h1>
+  <p>
+    You are about to remove your current two-factor authentication method. You
+    will be prompted to configure 2FA using an authentication app after you select
+    "Reset". Are you sure?
+  </p>
+  <form method="post">
+    {% csrf_token %}
+    <span class="mt-2 mr-4">{{ form }}</span>
+    <button class="btn btn-warning" type="submit">{% trans "Reset" %}</button>
+  </form>
+{% endblock %}

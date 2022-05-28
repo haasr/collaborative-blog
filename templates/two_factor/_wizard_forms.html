@@ -1,0 +1,16 @@
+{% load twofactor %}
+
+{{ wizard.management_form }}
+
+<div class="mt-3 mb-3">
+  {% for field in wizard.form %}
+  <div class="row">
+    <div class="col-25">
+      <label class="fs-400">{{ field.label }}</label>
+    </div>
+    <div class="col-75">
+    {{ field|add_classes:'account-form' }}
+    </div>
+  </div>
+  {% endfor %}
+</div>

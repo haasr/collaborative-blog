@@ -1,0 +1,100 @@
+{% extends "./site_pages_base.html" %}
+{% load static %}
+
+{% block page_title %}Topics{% endblock page_title %}
+
+{% block content %}
+<div class="content-container-md-clear border-brand-green shadow mt-4 mb-4">
+    {% if topics_header.show_header_image %}
+    {% with 'site_pages/topics/header_image/'|add:topics_header.header_image_file_name as topics_img_static %}
+    <div class="header-image" style="background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('{% static topics_img_static %}');">
+    {% endwith %}
+        <div class="hero-text-header text-center">
+            <h1 class="text-light textshadow">Topics</h1>
+            {% if topics_header.header_text != '' %}
+            <h4 class="header-text justify-content-center text-light">
+                {{ topics_header.header_text }}
+            </h4>
+            {% endif %}
+        </div>
+    </div>
+    {% else %}
+    <div class="center-container pad-container">
+        <h1 class="title-container text-center">Topics</h1>
+        {% if topics_header.header_text != '' %}
+        <h4 class="text-center" style="margin-top: 2%;">
+            {{ topics_header.header_text }}
+        </h4>
+        {% endif %}
+    </div>
+    {% endif %}
+    <div class="row" id="topics-list">
+        <div class="col-md" style="max-width: 1000px; padding: 2em;">
+            <div class="lightly-pad-container bg-front-neutral border-dotted-brand-green">
+                <span class="title-bolder">Featured Topics</span>
+                {% for topic in topics %}
+                {% if topic.is_featured %}
+                {% if topic.splash_img_file_name != '' %}
+                <div class="container topic-container">
+                    <a class="topic-link" href="{% url 'topic_posts' topic.id %}">
+                        {% with 'site_pages/topics/topic_splash_images/'|add:topic.splash_img_file_name as topic_img_static %}
+                        <img src="{% static topic_img_static %}"
+                            alt="Topic Splash Image"
+                            style="width: 100%; height: 150px; object-fit: cover; border-radius: 5px;">
+                        {% endwith %}
+                        <div class="topic-name text-light textshadow title">
+                            {{ topic.name }}
+                        </div>
+                    </a>
+                </div>
+                {% else %}
+                <div class="container topic-container">
+                    <a class="topic-link" href="{% url 'topic_posts' topic.id %}">
+                        <img src="{% static 'images/topic-null.png' %}"
+                        alt="Topic Splash Image" style="width: 100%; height: 150px; object-fit: cover; border-radius: 5px;">
+                        <div class="topic-name text-light textshadow title">
+                            {{ topic.name }}
+                        </div>
+                    </a>
+                </div>
+                {% endif %}
+                {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="col-xs" style="min-width: 320px; max-width: 500px; padding: 2em;">
+            <div class="lightly-pad-container bg-front-neutral border-dotted-brand-green">
+                <div class="d-flex">
+                    <span class="title">A-Z&ensp;</span>
+                    <input type="text" class="search" placeholder="Search topic" style="width: 176px;">
+                </div>
+                <ul class="list" style="margin-top: 6px; list-style: none;">
+                    {% for topic in topics %}
+                    <li>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#448980" class="bi bi-tag-fill" viewBox="0 0 16 16">
+                            <path d="M2 1a1 1 0 0 0-1 1v4.586a1 1 0 0 0 .293.707l7 7a1 1 0 0 0 1.414 0l4.586-4.586a1 1 0 0 0 0-1.414l-7-7A1 1 0 0 0 6.586 1H2zm4 3.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/>
+                        </svg>
+                        <a href="{% url 'topic_posts' topic.id %}" class="topic-name">
+                            <span class="highlight">{{ topic.name }}</span>
+                        </a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div><br></div>
+</div>
+{% endblock content %}
+
+{% block body_scripts %}
+<script src="{% static 'js/list.js' %}"></script>
+<script src="{% static 'site_pages/js/topics-list.js'%}"></script>
+
+<script>
+    $(document).ready(function() {
+        setActiveLink('topics');
+    });
+</script>
+{% endblock body_scripts %}

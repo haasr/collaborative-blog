@@ -1,0 +1,779 @@
+{% extends "../admin_pages_base.html" %}
+
+{% load static %}
+{% load texttransform %}
+{% load i18n two_factor %}
+
+{% block profile_dropdown_links %}
+
+{% if twofactor_default_device %}
+<div class="row card-row">
+    <div class="col">
+        <a href="{% url 'admin_pages:manage_author_profile' 'true' %}">Author Profile</a>
+    </div>
+</div>
+<div class="row card-row">
+    <div class="col">
+        <a href="{% url 'users:update_user' 'true' %}">User Account</a>
+    </div>
+</div>
+{% endif %}
+
+{% endblock profile_dropdown_links %}
+
+{% block content %}
+
+{% if twofactor_default_device %}
+
+<style>
+    .expand-content { margin-left: -10px; }
+</style>
+
+<div class="d-flex justify-content-center mt-3 mb-3">
+    <a href="{% url 'admin_pages:admin_index' %}">
+        <button class="btn btn-warning">&#60; Back to Menu</button>
+    </a>
+</div>
+
+<div class="container" style="background-color: #858383; border-radius: 5px;">
+    <h1 class="text-center text-white pt-3">Manage Posts</h1>
+    <div class="d-flex justify-content-center mt-4 mb-4">
+        <a href="{% url 'admin_pages:new_post' %}">
+            <button class="btn btn-primary">New Post</button>
+        </a>
+    </div>
+
+    <div class="posts-row pad-container hide-when-small shadow">
+        <div class="container shadow" id="author-posts-list"
+            style="width: 100%; background-color: #F1F1F1; border-radius: 5px;">
+            <div class="title pad-container">Authored Posts</div>
+            <div class="d-flex justify-content-center">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16" height="36" class="bi bi-search pl-1 pr-1" width="30">
+                    <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+                </svg>
+                <div style="width: 85%;">
+                    <input type="text" class="search" placeholder="Search by title, date, author, location">
+                </div>
+            </div>
+            <ul class="list" style="list-style: none;">
+                {% for post in author_posts %}
+                <li>
+                    <div class="collapse-container row"
+                        style="border-top-left-radius: 10px; border-top-right-radius: 10px;">
+                        <div class="mr-3" style="width: 50px;">
+                            {% if post.box_img_file_name == '' %}
+                            <img class="border-brand-green" src="{% static 'images/null-image.png' %}" alt="Filler Image" width="50px;"
+                                style="border-radius: 5px;">
+                            {% else %}
+                            {% with 'site_pages/posts/images/'|add:post.box_img_file_name as post_img_static %}
+                            <img class="border-brand-green" src="{% static post_img_static %}"
+                                alt="{{ post.box_img_alt }}" width="50px;" style="border-radius: 3px;"
+                                style="border-radius: 5px;">
+                            {% endwith %}
+                            {% endif %}
+                        </div>
+                        <div class="author-post-title font-weight-bolder" style="width: 300px;">
+                            {{ post.title|truncate_uniform_ljust:29 }}
+                        </div>
+                        <div class="author-post-date" style="width: 200px;">
+                            {{ post.date }}
+                        </div>
+                        <div class="author-post-author" style="width: 100px;">
+                            {{ post.author.preferred_name|truncate_uniform_ljust:20 }}
+                        </div>
+                        {% if post.location != '' %}
+                        <div class="author-post-location" style="width: 200px;">
+                            {{ post.location|truncate_uniform_ljust:20 }}
+                        </div>
+                        {% else %}
+                        <div class="author-post-location" style="width: 200px;">
+                            &ensp;No location&ensp;
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="expand-content">
+                        <div class="row">
+                            <div class="col-lg">
+                                {% if post.box_img_file_name == '' %}
+                                <img class="border-brand-green" src="{% static 'images/null-image.png' %}" alt="Filler Image" width="200px"
+                                    style="border-radius: 5px;">
+                                {% else %}
+                                {% with 'site_pages/posts/images/'|add:post.box_img_file_name as post_img_static %}
+                                <img class="border-brand-green" src="{% static post_img_static %}"
+                                    alt="{{ post.box_img_alt }}" width="200px" height="200px" style="border-radius: 5px;">
+                                {% endwith %}
+                                <a href="{% url 'admin_pages:replace_post_image' post.id %}" title="Edit Post image">
+                                    <svg class="border-dotted-brand-green shadow" xmlns="http://www.w3.org/2000/svg" width="34" height="34" fill="#448980" class="bi bi-pencil" viewBox="0 0 16 16"
+                                        style="margin-left: -10%; margin-top: -30%; border-radius: 50%; background-color: #fff;">
+                                        <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z"/>
+                                    </svg>
+                                </a>
+                                {% endif %}
+                                <div>
+                                    {{ post.box_content_text|remove_headers|safe|truncatechars:500 }}
+                                </div>
+                            </div>
+                            <div class="col-sm" style="max-width: 460px;">
+                                <h3 class="mt-2 mb-2">Actions</h3>
+                                <a href="/post/{{ post.slug }}" target="_blank"><button class="btn bttn-outline-brand-green">View Post</button></a>
+                                <a href="{% url 'admin_pages:edit_post' post.id %}"><button class="btn btn-outline-primary">Edit Post</button></a>
+                                <a href="{% url 'admin_pages:confirm_delete_post' post.id %}"><button class="btn btn-outline-danger">Delete Post</button></a>
+                                <hr>
+                                <h3 class="mb-2">Topics</h3>
+                                <ul style="list-style: none;">
+                                    {% for topic in post.topics.all %}
+                                    <span class="highlight">{{ topic.name }}
+                                        <a href="{% url 'admin_pages:delete_post_topic' post.id topic.id %}">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="34" height="34" fill="#DB3545" class="bi bi-x" viewBox="0 0 16 16">
+                                                <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+                                            </svg>
+                                        </a>
+                                    </span>
+                                    {% endfor %}
+                                </ul>
+                                <div class="d-flex justify-content-center mt-2">
+                                    <a href="{% url 'admin_pages:add_topic' post.id %}">
+                                        <button class="btn bttn-outline-brand-green">
+                                            Add Topic
+                                        </button>
+                                    </a>
+                                </div>
+                                <hr>
+                                <h3 class="mb-2">Collaborators</h3>
+                                <a href="{% url 'admin_pages:manage_post_collaborators' post.id %}">
+                                    <button class="btn bttn-outline-brand-green">
+                                        Manage Collaborators
+                                    </button>
+                                </a>
+                                <p>
+                                    {% for c in collaborators.all %}
+                                    {% if c.post.id == post.id %}
+                                    <span class="hightlight">{{ c.author.preferred_name }}&emsp;</span>
+                                    {% endif %}
+                                    {% endfor %}
+                                </p>
+                                {% if post.visibility == 'private' %}
+                                <p class="footnote">
+                                    Note: Your visibility is set to private. If you
+                                    wish to allow collaboration, please change your
+                                    visibility to restricted or public.
+                                </p>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    <div class="posts-row pad-container hide-when-small shadow mt-3">
+        <div class="container shadow" id="contrib-posts-list"
+            style="width: 100%; background-color: #F1F1F1; border-radius: 5px;">
+            <div class="title pad-container">Posts Available for Collaboration</div>
+            <div class="content-container-sm-clear bg-front-neutral mb-4">
+                <p class="p-2 border-dotted-brand-green text-center fs-400">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="2.1rem" height="2.1rem" fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16"
+                        style="float: left;">
+                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                        <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
+                    </svg>
+                    &nbsp;Note that no synchronization feature currently exists to allow
+                    multiple authors to work simultaneously on a post; that will likely lead
+                    to data being overridden when the post is saved. For now, ensure that
+                    other collaborators are not editing a post you are editing. Hopefully
+                    this functionality can be developed soon.
+                </p>
+            </div>
+            <div class="d-flex justify-content-center">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16" height="36" class="bi bi-search pl-1 pr-1" width="30">
+                    <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+                </svg>
+                <div style="width: 85%;">
+                    <input type="text" class="search" placeholder="Search by title, date, author, location">
+                </div>
+            </div>
+            <ul class="list" style="list-style: none;">
+                {% for post in collab_posts %}
+                <li>
+                    <div class="collapse-container row"
+                        style="border-top-left-radius: 10px; border-top-right-radius: 10px;">
+                        <div class="mr-3" style="width: 50px;">
+                            {% if post.box_img_file_name == '' %}
+                            <img class="border-brand-green" src="{% static 'images/null-image.png' %}" alt="Filler Image" width="50px;">
+                            {% else %}
+                            {% with 'site_pages/posts/images/'|add:post.box_img_file_name as post_img_static %}
+                            <img class="border-brand-green" src="{% static post_img_static %}"
+                                alt="{{ post.box_img_alt }}" width="50px;" style="border-radius: 3px;">
+                            {% endwith %}
+                            {% endif %}
+                        </div>
+                        <div class="contrib-post-title font-weight-bolder" style="width: 300px;">
+                            {{ post.title|truncate_uniform_ljust:29 }}
+                        </div>
+                        <div class="contrib-post-date" style="width: 200px;">
+                            {{ post.date }}
+                        </div>
+                        <div class="contrib-post-author" style="width: 100px;">
+                            {{ post.author.preferred_name|truncate_uniform_ljust:20 }}
+                        </div>
+                        {% if post.location != '' %}
+                        <div class="contrib-post-location" style="width: 200px;">
+                            {{ post.location|truncate_uniform_ljust:20 }}
+                        </div>
+                        {% else %}
+                        <div class="contrib-post-location" style="width: 200px;">
+                            &ensp;No location&ensp;
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="expand-content">
+                        <div class="row">
+                            <div class="col-lg">
+                                {% if post.box_img_file_name == '' %}
+                                <img class="border-brand-green" src="{% static 'images/null-image.png' %}" alt="Filler Image" width="200px"
+                                    style="border-radius: 5px;">
+                                {% else %}
+                                {% with 'site_pages/posts/images/'|add:post.box_img_file_name as post_img_static %}
+                                <img class="border-brand-green" src="{% static post_img_static %}"
+                                    alt="{{ post.box_img_alt }}" width="200px" height="200px" style="border-radius: 5px;">
+                                {% endwith %}
+                                <a href="{% url 'admin_pages:replace_post_image' post.id %}" title="Edit Post image">
+                                    <svg class="border-dotted-brand-green shadow" xmlns="http://www.w3.org/2000/svg" width="34" height="34" fill="#448980" class="bi bi-pencil" viewBox="0 0 16 16"
+                                        style="margin-left: -10%; margin-top: -30%; border-radius: 50%; background-color: #fff;">
+                                        <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z"/>
+                                    </svg>
+                                </a>
+                                {% endif %}
+                                <div>
+                                    {{ post.box_content_text|remove_headers|safe|truncatechars:500 }}
+                                    <a href="/post/{{ post.slug }}" target="_blank">
+                                        <button class="btn btn-outline-primary">
+                                            View Post
+                                        </button>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="col-sm" style="max-width: 460px;">
+                                <h3 class="mt-2 mb-2">Actions</h3>
+                                <a href="{% url 'admin_pages:edit_post' post.id %}">
+                                    <button class="btn btn-outline-primary">
+                                        Edit Post
+                                    </button>
+                                </a>
+                                <a class="space-left-sm" href="{% url 'admin_pages:confirm_delete_post' post.id %}">
+                                    <button class="btn btn-outline-danger">
+                                        Delete Post
+                                    </button>
+                                </a>
+                                <hr>
+                                <h3 class="mb-2">Topics</h3>
+                                <ul style="list-style: none;">
+                                    {% for topic in post.topics.all %}
+                                    <span class="highlight">{{ topic.name }}
+                                        <a href="{% url 'admin_pages:delete_post_topic' post.id topic.id %}">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="34" height="34" fill="#DB3545" class="bi bi-x" viewBox="0 0 16 16">
+                                                <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+                                            </svg>
+                                        </a>
+                                    </span>
+                                    {% endfor %}
+                                </ul>
+                                <div class="d-flex justify-content-center">
+                                    <a href="{% url 'admin_pages:add_topic' post.id %}">
+                                        <button class="btn bttn-outline-brand-green">
+                                            Add Topic
+                                        </button>
+                                    </a>
+                                </div>
+                                <hr>
+                                <h3 class="mb-2">Collaborators</h3>
+                                <a href="{% url 'admin_pages:manage_post_collaborators' post.id %}">
+                                    <button class="btn bttn-outline-brand-green">
+                                        Manage Collaborators
+                                    </button>
+                                </a>
+                                <p>
+                                    {% for c in collaborators.all %}
+                                    {% if c.post.id == post.id %}
+                                    <span class="hightlight">{{ c.author.preferred_name }}&emsp;</span>
+                                    {% endif %}
+                                    {% endfor %}
+                                </p>
+                                {% if post.visibility == 'private' %}
+                                <p class="footnote">
+                                    Note: Your visibility is set to private. If you
+                                    wish to allow collaboration, please change your
+                                    visibility to restricted or public.
+                                </p>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    <div class="posts-row pad-container hide-when-small shadow mt-3">
+        <div class="container shadow" id="public-posts-list"
+            style="width: 100%; background-color: #F1F1F1; border-radius: 5px;">
+            <div class="title pad-container">All Public Posts</div>
+            <div class="d-flex justify-content-center">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16" height="36" class="bi bi-search pl-1 pr-1" width="30">
+                    <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+                </svg>
+                <div style="width: 85%;">
+                    <input type="text" class="search" placeholder="Search by title, date, author, location">
+                </div>
+            </div>
+            <ul class="list" style="list-style: none;">
+                {% for post in public_posts %}
+                <li>
+                    <div class="collapse-container row"
+                        style="border-top-left-radius: 10px; border-top-right-radius: 10px;">
+                        <div class="mr-3" style="width: 50px;">
+                            {% if post.box_img_file_name == '' %}
+                            <img class="border-brand-green" src="{% static 'images/null-image.png' %}" alt="Filler Image" width="50px;"
+                                style="border-radius: 5px;">
+                            {% else %}
+                            {% with 'site_pages/posts/images/'|add:post.box_img_file_name as post_img_static %}
+                            <img class="border-brand-green" src="{% static post_img_static %}"
+                                alt="{{ post.box_img_alt }}" width="50px;" style="border-radius: 3px;"
+                                style="border-radius: 5px;">
+                            {% endwith %}
+                            {% endif %}
+                        </div>
+                        <div class="public-post-title font-weight-bolder" style="width: 300px;">
+                            {{ post.title|truncate_uniform_ljust:29 }}
+                        </div>
+                        <div class="public-post-date" style="width: 200px;">
+                            {{ post.date }}
+                        </div>
+                        <div class="public-post-author" style="width: 100px;">
+                            {{ post.author.preferred_name|truncate_uniform_ljust:20 }}
+                        </div>
+                        {% if post.location != '' %}
+                        <div class="public-post-location" style="width: 200px;">
+                            {{ post.location|truncate_uniform_ljust:20 }}
+                        </div>
+                        {% else %}
+                        <div class="author-post-location" style="width: 200px;">
+                            &ensp;No location&ensp;
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="expand-content">
+                        <div class="row">
+                            <div class="col-lg">
+                                {% if post.box_img_file_name == '' %}
+                                <img class="border-brand-green" src="{% static 'images/null-image.png' %}" alt="Filler Image" width="200px"
+                                    style="border-radius: 5px;">
+                                {% else %}
+                                {% with 'site_pages/posts/images/'|add:post.box_img_file_name as post_img_static %}
+                                <img class="border-brand-green" src="{% static post_img_static %}"
+                                    alt="{{ post.box_img_alt }}" width="200px" height="200px" style="border-radius: 5px;">
+                                {% endwith %}
+                                <a href="{% url 'admin_pages:replace_post_image' post.id %}" title="Edit Post image">
+                                    <svg class="border-dotted-brand-green shadow" xmlns="http://www.w3.org/2000/svg" width="34" height="34" fill="#448980" class="bi bi-pencil" viewBox="0 0 16 16"
+                                        style="margin-left: -10%; margin-top: -30%; border-radius: 50%; background-color: #fff;">
+                                        <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z"/>
+                                    </svg>
+                                </a>
+                                {% endif %}
+                                <div>
+                                    {{ post.box_content_text|remove_headers|safe|truncatechars:500 }}
+                                </div>
+                            </div>
+                            <div class="col-sm" style="max-width: 460px;">
+                                <h3 class="mt-2 mb-2">Actions</h3>
+                                <a href="/post/{{ post.slug }}" target="_blank"><button class="btn bttn-outline-brand-green">View Post</button></a>
+                                <a href="{% url 'admin_pages:edit_post' post.id %}"><button class="btn btn-outline-primary">Edit Post</button></a>
+                                <a href="{% url 'admin_pages:confirm_delete_post' post.id %}"><button class="btn btn-outline-danger">Delete Post</button></a>
+                                <hr>
+                                <h3 class="mb-2">Topics</h3>
+                                <ul style="list-style: none;">
+                                    {% for topic in post.topics.all %}
+                                    <span class="highlight">{{ topic.name }}
+                                        <a href="{% url 'admin_pages:delete_post_topic' post.id topic.id %}">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="34" height="34" fill="#DB3545" class="bi bi-x" viewBox="0 0 16 16">
+                                                <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+                                            </svg>
+                                        </a>
+                                    </span>
+                                    {% endfor %}
+                                </ul>
+                                <div class="d-flex justify-content-center">
+                                    <a href="{% url 'admin_pages:add_topic' post.id %}">
+                                        <button class="btn bttn-outline-brand-green">
+                                            Add Topic
+                                        </button>
+                                    </a>
+                                </div>
+                                <hr>
+                                <h3 class="mb-2">Collaborators</h3>
+                                <a href="{% url 'admin_pages:manage_post_collaborators' post.id %}">
+                                    <button class="btn bttn-outline-brand-green">
+                                        Manage Collaborators
+                                    </button>
+                                </a>
+                                <p>
+                                    {% for c in collaborators.all %}
+                                    {% if c.post.id == post.id %}
+                                    <span class="hightlight">{{ c.author.preferred_name }}&emsp;</span>
+                                    {% endif %}
+                                    {% endfor %}
+                                </p>
+                                {% if post.visibility == 'private' %}
+                                <p class="footnote">
+                                    Note: Your visibility is set to private. If you
+                                    wish to allow collaboration, please change your
+                                    visibility to restricted or public.
+                                </p>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    <div class="show-when-small container shadow">
+        <div class="container shadow" id="author-posts-list"
+            style="width: 100%; background-color: #F1F1F1; border-radius: 5px;">
+            <div class="title pad-container">Authored Posts</div>
+            <ul class="list" style="list-style: none;">
+            {% for post in author_posts %}
+                <li>
+                    <div class="collapse-container">
+                        <div style="padding-right: 10px;">
+                            {% if post.box_img_file_name == '' %}
+                            <img class="border-brand-green" src="{% static 'images/null-image.png' %}" alt="Filler Image" width="50px;"
+                                style="float: left; border-radius: 5px;">
+                            {% else %}
+                            {% with 'site_pages/posts/images/'|add:post.box_img_file_name as post_img_static %}
+                            <img class="border-brand-green" src="{% static post_img_static %}"
+                                alt="{{ post.box_img_alt }}" width="50px;" style="float: left; border-radius: 3px;"
+                                style="border-radius: 5px;">
+                            {% endwith %}
+                            {% endif %}
+                        </div>
+                        <h4 class="author-post-title">{{ post.title|truncate_uniform_ljust:29 }}</h4>
+                        <span class="author-post-date" style="font-size: 14px;">
+                            {{ post.date }}
+                        </span>
+                        <span class="author-post-author" style="font-size: 14px;">
+                              |  {{ post.author.preferred_name|truncate_uniform_ljust:20 }}
+                        </span>
+                        {% if post.location == '' %}
+                        <br>
+                        <span class="author-post-location" style="font-size: 14px;">
+                            {{ post.location }}
+                        </span>
+                        {% endif %}
+                    </div>
+                    <div class="expand-content">
+                        <div>
+                            {{ post.box_content_text|remove_headers|safe|truncatechars:250 }}
+                            <a href="/post/{{ post.slug }}" target="_blank">
+                                <button class="btn btn-outline-primary">
+                                    View Post
+                                </button>
+                            </a>
+                        </div>
+                        <hr>
+                        <div class="col-sm">
+                            <h3 class="mt-2">Actions</h3>
+                            <a href="{% url 'admin_pages:edit_post' post.id %}">
+                                <button class="btn btn-outline-primary">
+                                    Edit Post
+                                </button>
+                            </a>
+                            <a class="space-left-sm" href="{% url 'admin_pages:confirm_delete_post' post.id %}">
+                                <button class="btn btn-outline-danger">
+                                    Delete Post
+                                </button>
+                            </a>
+                            <hr>
+                            <h3 class="mb-2">Topics</h3>
+                            <ul style="list-style: none;">
+                                {% for topic in post.topics.all %}
+                                <span class="highlight">{{ topic.name }}
+                                    <a href="{% url 'admin_pages:delete_post_topic' post.id topic.id %}">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="34" height="34" fill="#DB3545" class="bi bi-x" viewBox="0 0 16 16">
+                                            <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+                                        </svg>
+                                    </a>
+                                </span>
+                                {% endfor %}
+                            </ul>
+                            <div class="d-flex justify-content-center">
+                                <a href="{% url 'admin_pages:add_topic' post.id %}">
+                                    <button class="btn bttn-outline-brand-green">
+                                        Add Topic
+                                    </button>
+                                </a>
+                            </div>
+                            <hr>
+                            <h3 class="mb-2">Collaborators</h3>
+                            <a href="{% url 'admin_pages:manage_post_collaborators' post.id %}">
+                                <button class="btn bttn-outline-brand-green">
+                                    Manage Collaborators
+                                </button>
+                            </a>
+                            <p>
+                                {% for c in collaborators.all %}
+                                {% if c.post.id == post.id %}
+                                <span class="hightlight">{{ c.author.preferred_name }}&emsp;</span>
+                                {% endif %}
+                                {% endfor %}
+                            </p>
+                            {% if post.visibility == 'private' %}
+                            <p class="footnote" style="font-style: italic;">
+                                Note: Your visibility is set to private. If you
+                                wish to allow collaboration, please change your
+                                visibility to restricted or public.
+                            </p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </li>
+            {% endfor %}
+            </ul>
+        </div>
+
+        <div class="container shadow">
+            <div class="container shadow" id="contrib-posts-list"
+                style="width: 100%; background-color: #F1F1F1; border-radius: 5px;">
+                <div class="title pad-container">Posts Available for Collaboration</div>
+                <ul class="list" style="list-style: none;">
+                    {% for post in collab_posts %}
+                    <li>
+                        <div class="collapse-container">
+                            <div style="padding-right: 10px;">
+                                {% if post.box_img_file_name == '' %}
+                                <img class="border-brand-green" src="{% static 'images/null-image.png' %}" alt="Filler Image" width="50px;"
+                                    style="float: left; border-radius: 5px;">
+                                {% else %}
+                                {% with 'site_pages/posts/images/'|add:post.box_img_file_name as post_img_static %}
+                                <img class="border-brand-green" src="{% static post_img_static %}"
+                                    alt="{{ post.box_img_alt }}" width="50px;" style="float: left; border-radius: 3px;"
+                                    style="border-radius: 5px;">
+                                {% endwith %}
+                                {% endif %}
+                            </div>
+                            <h4 class="contrib-post-title">{{ post.title|truncate_uniform_ljust:29 }}</h4>
+                            <span class="contrib-post-date" style="font-size: 14px;">
+                                {{ post.date }}
+                            </span>
+                            <span class="contrib-post-author" style="font-size: 14px;">
+                                  |  {{ post.author.preferred_name|truncate_uniform_ljust:20 }}
+                            </span>
+                            {% if post.location == '' %}
+                            <br>
+                            <span class="contrib-post-location" style="font-size: 14px;">
+                                {{ post.location }}
+                            </span>
+                            {% endif %}
+                        </div>
+                        <div class="expand-content">
+                            <div>
+                                {{ post.box_content_text|remove_headers|safe|truncatechars:250 }}
+                                <a href="/post/{{ post.slug }}" target="_blank">
+                                    <button class="btn btn-outline-primary">
+                                        View Post
+                                    </button>
+                                </a>
+                            </div>
+                            <hr>
+                            <div class="col-sm">
+                                <h3 class="mt-2">Actions</h3>
+                                <a href="{% url 'admin_pages:edit_post' post.id %}">
+                                    <button class="btn btn-outline-primary">
+                                        Edit Post
+                                    </button>
+                                </a>
+                                <a class="space-left-sm" href="{% url 'admin_pages:confirm_delete_post' post.id %}">
+                                    <button class="btn btn-outline-danger">
+                                        Delete Post
+                                    </button>
+                                </a>
+                                <hr>
+                                <h3 class="mb-2">Topics</h3>
+                                <ul style="list-style: none;">
+                                    {% for topic in post.topics.all %}
+                                    <span class="highlight">{{ topic.name }}
+                                        <a href="{% url 'admin_pages:delete_post_topic' post.id topic.id %}">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="34" height="34" fill="#DB3545" class="bi bi-x" viewBox="0 0 16 16">
+                                                <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+                                            </svg>
+                                        </a>
+                                    </span>
+                                    {% endfor %}
+                                </ul>
+                                <div class="d-flex justify-content-center">
+                                    <a href="{% url 'admin_pages:add_topic' post.id %}">
+                                        <button class="btn bttn-outline-brand-green">
+                                            Add Topic
+                                        </button>
+                                    </a>
+                                </div>
+                                <hr>
+                                <h3 class="mb-2">Collaborators</h3>
+                                <a href="{% url 'admin_pages:manage_post_collaborators' post.id %}">
+                                    <button class="btn bttn-outline-brand-green">
+                                        Manage Collaborators
+                                    </button>
+                                </a>
+                                <p>
+                                    {% for c in collaborators.all %}
+                                    {% if c.post.id == post.id %}
+                                    <span class="hightlight">{{ c.author.preferred_name }}&emsp;</span>
+                                    {% endif %}
+                                    {% endfor %}
+                                </p>
+                                {% if post.visibility == 'private' %}
+                                <p class="footnote" style="font-style: italic;">
+                                    Note: Your visibility is set to private. If you
+                                    wish to allow collaboration, please change your
+                                    visibility to restricted or public.
+                                </p>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+
+        <div class="container shadow">
+            <div class="container shadow" id="public-posts-list"
+                style="width: 100%; background-color: #F1F1F1; border-radius: 5px;">
+                <div class="title pad-container">All Public Posts</div>
+                <ul class="list" style="list-style: none;">
+                    {% for post in public_posts %}
+                    <li>
+                        <div class="collapse-container">
+                            <div style="padding-right: 10px;">
+                                {% if post.box_img_file_name == '' %}
+                                <img class="border-brand-green" src="{% static 'images/null-image.png' %}" alt="Filler Image" width="50px;"
+                                    style="float: left; border-radius: 5px;">
+                                {% else %}
+                                {% with 'site_pages/posts/images/'|add:post.box_img_file_name as post_img_static %}
+                                <img class="border-brand-green" src="{% static post_img_static %}"
+                                    alt="{{ post.box_img_alt }}" width="50px;" style="float: left; border-radius: 3px;"
+                                    style="border-radius: 5px;">
+                                {% endwith %}
+                                {% endif %}
+                            </div>
+                            <h4 class="public-post-title">{{ post.title|truncate_uniform_ljust:29 }}</h4>
+                            <span class="public-post-date" style="font-size: 14px;">
+                                {{ post.date }}
+                            </span>
+                            <span class="public-post-author" style="font-size: 14px;">
+                                  |  {{ post.author.preferred_name|truncate_uniform_ljust:20 }}
+                            </span>
+                            {% if post.location == '' %}
+                            <br>
+                            <span class="public-post-location" style="font-size: 14px;">
+                                {{ post.location }}
+                            </span>
+                            {% endif %}
+                        </div>
+                        <div class="expand-content">
+                            <div>
+                                {{ post.box_content_text|remove_headers|safe|truncatechars:250 }}
+                                <a href="/post/{{ post.slug }}" target="_blank">
+                                    <button class="btn btn-outline-primary">
+                                        View Post
+                                    </button>
+                                </a>
+                            </div>
+                            <div class="col-sm">
+                                <h3 class="mt-2">Actions</h3>
+                                <a href="{% url 'admin_pages:edit_post' post.id %}">
+                                    <button class="btn btn-outline-primary">
+                                        Edit Post
+                                    </button>
+                                </a>
+                                <a class="space-left-sm" href="{% url 'admin_pages:confirm_delete_post' post.id %}">
+                                    <button class="btn btn-outline-danger">
+                                        Delete Post
+                                    </button>
+                                </a>
+                                <hr>
+                                <h3 class="mb-2">Topics</h3>
+                                <ul style="list-style: none;">
+                                    {% for topic in post.topics.all %}
+                                    <span class="highlight">{{ topic.name }}
+                                        <a href="{% url 'admin_pages:delete_post_topic' post.id topic.id %}">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="34" height="34" fill="#DB3545" class="bi bi-x" viewBox="0 0 16 16">
+                                                <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+                                            </svg>
+                                        </a>
+                                    </span>
+                                    {% endfor %}
+                                </ul>
+                                <div class="d-flex justify-content-center">
+                                    <a href="{% url 'admin_pages:add_topic' post.id %}">
+                                        <button class="btn bttn-outline-brand-green">
+                                            Add Topic
+                                        </button>
+                                    </a>
+                                </div>
+                                <hr>
+                                <h3 class="mb-2">Collaborators</h3>
+                                <a href="{% url 'admin_pages:manage_post_collaborators' post.id %}">
+                                    <button class="btn bttn-outline-brand-green">
+                                        Manage Collaborators
+                                    </button>
+                                </a>
+                                <p>
+                                    {% for c in collaborators.all %}
+                                    {% if c.post.id == post.id %}
+                                    <span class="hightlight">{{ c.author.preferred_name }}&emsp;</span>
+                                    {% endif %}
+                                    {% endfor %}
+                                </p>
+                                {% if post.visibility == 'private' %}
+                                <p class="footnote" style="font-style: italic;">
+                                    Note: Your visibility is set to private. If you
+                                    wish to allow collaboration, please change your
+                                    visibility to restricted or public.
+                                </p>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<br>
+
+{% else %}
+
+<div class="login-container flow shadow" style="border: 1px dotted hsl( var(--clr-brand-green) );">
+    <p>{% blocktrans trimmed %}A two-factor authentication method is not configured for your
+        account. You must set up a new 2FA configuration before you can use your account.{% endblocktrans %}</p>
+    <p class="text-center mt-2"><a href="{% url 'two_factor:setup' %}" class="btn btn-primary">
+    {% trans "Configure Two-Factor Authentication" %}</a>
+    </p>
+</div>
+
+{% endif %}
+
+{% endblock content %}
+
+{% block body_scripts %}
+<script src="{% static 'admin_pages/js/collapse-container-toggler.js' %}"></script>
+<script src="{% static 'js/list.js' %}"></script>
+<script src="{% static 'admin_pages/js/posts-lists.js' %}"></script>
+{% endblock body_scripts %}

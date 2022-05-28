@@ -1,0 +1,87 @@
+{% extends "../admin_pages_base.html" %}
+{% load static %}
+
+{% block content %}
+
+<div class="d-flex justify-content-center" style="padding: 1%;">
+	<a href="{% url 'admin_pages:admin_index' %}">
+		<button class="btn btn-warning">&#60; Back to Menu</button>
+	</a>
+</div>
+
+{% load crispy_forms_tags %}
+<div class="container-sm flow">
+	<div class="lightly-pad-container shadow text-break text-center border-dotted-brand-green">
+		<div class="text-center title"><h2>Manage Profile</h2></div>
+		<div class="form-container">
+			<div class="row">
+                <div class="col-25"></div>
+                <div class="col-75">
+                    <div class="col-25">
+                    </div>
+                    {% with 'site_pages/authors/profile_images/'|add:profile.profile_icon_file_name as profile_icon_static %}
+                    <img id="profile-icon" width="150" src="{% static profile_icon_static %}" alt="Author's profile icon" style="border-radius: 50%;">
+                    {% endwith %}
+                </div>
+            </div>
+            <br>
+			<form method='post' enctype='multipart/form-data'>
+				{% crispy form %}
+				<div class="form-row">
+                    <div class="col-25">
+                        &nbsp;
+                    </div>
+                    <div class="col-25" style="text-align: left;">
+                        <button class="btn btn-primary" type="submit">Save</button>
+                    </div>
+                    <div class="col-25" style="text-align: left;">
+                        <a href="{% url 'admin_pages:manage_posts' %}"><button class="btn btn-danger" type="button">Cancel</button></a>
+                    </div>
+                </div>
+			</form>
+		</div>
+	</div>
+</div>
+{% endblock content %}
+
+{% block body_scripts %}
+<script>
+	tinymce.init({
+		selector: 'textarea',
+		plugins: 'codesample',
+		content_style: "body { line-height: 1; }",
+		codesample_dialog_width: '400',
+		codesample_dialog_height: '400',
+		codesample_languages: [
+		{ text: 'HTML/XML', value: 'markup' },
+		{ text: 'PowerShell', value: '' },
+		{ text: 'JavaScript', value: 'javascript' },
+		{ text: 'CSS', value: 'css' },
+		{ text: 'PHP', value: 'php' },
+		{ text: 'Ruby', value: 'ruby' },
+		{ text: 'Python', value: 'python' },
+		{ text: 'Java', value: 'java' },
+		{ text: 'C', value: 'c' },
+		{ text: 'C#', value: 'csharp' },
+		{ text: 'C++', value: 'cpp' }
+	],
+  		toolbar: 'undo redo | styleselect | codesample | bold italic | alignleft aligncenter alignright alignjustify | outdent indent'
+	});
+</script>
+
+<script>
+    $("#id_profile_icon").on("change", function() {
+        let input = this;
+        let filename = $(this).val();
+        let ext = filename.substring(filename.lastIndexOf('.') + 1).toLowerCase();
+        if (input.files && input.files[0] && (ext == "gif" || ext == "png" || ext == "jpeg" || ext == "jpg"))
+        {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                $('#profile-icon').attr('src', e.target.result);
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+    });
+</script>
+{% endblock body_scripts %}

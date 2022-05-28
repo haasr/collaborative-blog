@@ -1,0 +1,359 @@
+{% extends "../admin_pages_base.html" %}
+
+{% load static %}
+{% load texttransform %}
+
+{% block head_scripts %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        BG_COLORS = [
+            'rgba(243, 169, 53, 0.6)',
+            'rgba(199, 53, 88, 0.6)',
+            'rgba(65, 100, 137, 0.6)',
+            'rgba(110, 190, 159, 0.6)',
+            'rgba(169, 112, 169, 0.6)',
+            'rgba(85, 89, 106, 0.6)',
+        ];
+
+        let formFailuresData = {{ form_failures_data|safe }};
+        let formFailuresXLabels = {{ form_failures_xlabels|safe }};
+
+        let nlFailuresData = {{ newsletter_failures_data|safe }};
+        let nlFailuresXLabels = {{ newsletter_failures_xlabels|safe }};
+
+        var ctx1 = document.getElementById('form-send-failures').getContext('2d');
+        var ctx2 = document.getElementById('newsletter-send-failures').getContext('2d');
+
+        var chart1 = new Chart(ctx1, {
+            type: 'bar',
+            data:
+            {
+                labels: formFailuresXLabels,
+                datasets: [
+                    {
+                    label: "",
+                        data: formFailuresData,
+                        backgroundColor: BG_COLORS,
+                        borderWidth: 1
+                    }
+                ]
+            },
+            options: {
+                scales: {
+                    xAxes: [{
+                        ticks: {
+                            fontSize: 13
+                        }
+                    }],
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true,
+                            stepSize: 1,
+                            suggestedMax: 5,
+                            fontSize: 13
+                        }
+                    }]
+                },
+                title : {
+                    display: true,
+                    position: "top",
+                    text: "Form send failures - last {{ timerange }} days",
+                    fontSize: 18,
+                    fontColor: '#000000'
+                },
+                legend: {
+                    labels: {
+                    // This more specific font property overrides the global property
+                        fontColor: '#000000',
+                        fontSize: 18,
+                        boxWidth: 0
+                    }
+                },
+                maintainAspectRatio: true,
+                //responsive: false
+            }
+        });
+
+
+        var chart2 = new Chart(ctx2, {
+            type: 'bar',
+            data:
+            {
+                labels: nlFailuresXLabels,
+                datasets: [
+                    {
+                    label: "",
+                        data: nlFailuresData,
+                        backgroundColor: BG_COLORS,
+                        borderWidth: 1
+                    }
+                ]
+            },
+            options: {
+                scales: {
+                    xAxes: [{
+                        ticks: {
+                            fontSize: 13
+                        }
+                    }],
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true,
+                            stepSize: 1,
+                            suggestedMax: 5,
+                            fontSize: 13
+                        }
+                    }]
+                },
+                title : {
+                    display: true,
+                    position: "top",
+                    text: "Newsletter send failures - last {{ timerange }} days",
+                    fontSize: 18,
+                    fontColor: '#000000'
+                },
+                legend: {
+                    labels: {
+                    // This more specific font property overrides the global property
+                        fontColor: '#000000',
+                        fontSize: 18,
+                        boxWidth: 0
+                    }
+                },
+                maintainAspectRatio: true,
+                //responsive: false
+            }
+        });
+    });
+</script>
+{% endblock head_scripts %}
+
+{% block content %}
+<div class="d-flex justify-content-center mt-4 mb-4">
+    <a href="{% url 'admin_pages:admin_index' %}">
+        <button class="btn btn-warning">&#60; Back to Menu</button>
+    </a>
+</div>
+
+<div class="flow container" style="background-color: #858383; border-radius: 5px;">
+    <h1 class="text-center text-white pt-3 pb-3">Mail Send Failures</h1>
+
+    <div class="container pad-container shadow" style="background-color: #B3BBC3; border-radius: 5px;">
+        <div class="center">
+            <select class="form-select form-select-lg mb-3" id="timerange-select"
+                aria-label=".form-select-lg example" onchange="reloadPage(this);">
+                <option value="1">Select # of days to display</option>
+                <option value="1">Today</option>
+                <option value="7">Last 7 days</option>
+                <option value="14">Last 14 days</option>
+                <option value="30">Last 30 days</option>
+                <option value="60">Last 60 days</option>
+                <option value="365">Last 365 days</option>
+            </select>
+        </div>
+        <div class="pt-3 pb-3 shadow" style="background-color: #F1F1F1; border-radius: 5px;">
+            <div class="row card-row">
+                <div class="col-md card-thin-border ml-4 mb-4 mr-4">
+                    <div class="text-center">
+                        <span class="fs-600">Form Send Failures</span>
+                    </div>
+
+                    <div class="row fs-400 border-dotted-brand-green pad-container">
+                        <div class="col-12">
+                            <h3 class="text-center mb-3">Summary Statistics</h3>
+                        </div>
+                        <div class="col-xs"><img src="{% static 'images/sigma.png' %}"></div>
+                        <div class="col-md">
+                            <p>
+                                <span class="fs-450 highlight">{{ form_send_failures|length }}</span> total forms failed
+                                to send in the last <span class="fs-450 highlight">{{ timerange }}</span> days.
+                            </p>
+                        </div>
+                        <canvas class="mt-3 border-dotted-brand-green" id="form-send-failures" width="75" height="75"></canvas>
+                    </div>
+                </div>
+                <div class="col-md card-thin-border ml-4 mb-4 mr-4">
+                    <div class="text-center">
+                        <span class="fs-600">Newsletter Send Failures</span>
+                    </div>
+
+                    <div class="row fs-400 border-dotted-brand-green pad-container">
+                        <div class="col-12">
+                            <h3 class="text-center mb-3">Summary Statistics</h3>
+                        </div>
+                        <div class="col-xs"><img src="{% static 'images/sigma.png' %}"></div>
+                        <div class="col-md">
+                            <p>
+                                <span class="fs-450 highlight">{{ newsletter_send_failures|length }}</span> total newsletters failed
+                                to send in the last <span class="fs-450 highlight">{{ timerange }}</span> days.
+                            </p>
+                        </div>
+                        <canvas class="mt-3 border-dotted-brand-green" id="newsletter-send-failures" width="75" height="75"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-3 pt-3 pb-3 shadow" id="denylist-emails-list"  style="background-color: #F1F1F1; border-radius: 5px;">
+            <div class="row">
+                <div class="col-md">
+                    <div class="title pad-container">Unsent Form Data</div>
+                    <ul style="margin-top: 15px;">
+                        {% for entry in form_send_failures %}
+                        <li class="mt-3 mr-4">
+                            <div class="collapse-container shadow mb-1" id="form-data-{{ forloop.counter0 }}">
+                                <span class="font-weight-bolder">{{ entry.form_name }} Form</span>
+                                <div>
+                                    <span class="float-right mt-1">
+                                        <a class="bg-light p-1" href="{% url 'admin_pages:delete_form_send_failure' entry.id %}" style="color: red; border-radius: 5px;">
+                                            Delete
+                                        </a>
+                                    </span>
+                                    {% if entry.resent_ok %}
+                                    <span class="float-right mr-1" title="Email successfully resent">
+                                        ✅&ensp;
+                                    </span>
+                                    {% endif %}
+                                    {% try_eval_text entry.form_data as result %}
+                                    {% is_dict result as data_is_dict %}
+                                    {% if data_is_dict %}
+                                    <span class="float-right mt-1 mr-2">
+                                        <a href="#" class="bg-light p-1" style="border-radius: 5px;"
+                                            onclick="resendFormData('{{ csrf_token }}', '{{ entry.form_name }}-{{ entry.id }}-formdata',
+                                                                    '{{ entry.to }}', '{{ entry.form_name }}')">
+                                            Resend
+                                        </a>
+                                    </span>
+                                    {% endif %}
+                                    <br>
+                                </div>
+                            </div>
+
+                            <div class="expand-content shadow align-items-center">
+                                <div class="row ml-2 mr-2">
+                                    <div class="col-md">
+                                        <span class="font-weight-bolder fs-400">Timestamp:</span>
+                                        &ensp;{{ entry.timestamp|date:"d M, Y" }} {{ entry.timestamp|time:"h:i" }}
+                                    </div>
+                                    <div class="col-sm">
+                                        <span class="font-weight-bolder fs-400">To addr:</span>
+                                        &ensp;&ensp;{{ entry.to }}
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row ml-2 mr-2">
+                                    <div class="col">
+                                        <span class="font-weight-bolder fs-400">Form:</span>
+                                        &ensp;&ensp;{{ entry.form_name }}
+                                    </div>
+                                </div
+                                <hr>
+                                <div class="row ml-2 mr-2">
+                                    <div class="col">
+                                        <span class="font-weight-bolder fs-400">Exception:</span>
+                                        &ensp;&ensp;{{ entry.exception }}
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row ml-2 mr-2">
+                                    <div class="col">
+                                        <div class="font-weight-bolder text-center fs-400">Form Data</div>
+                                        {% if data_is_dict %}
+                                            {% for k, v in result.items %}
+                                            <div class="mt-2">
+                                                <span class="font-weight-bolder">{{ k }}:</span>&emsp;
+                                                <span id="{{ entry.form_name }}-{{ entry.id }}-{{ k }}">{{ v }}</span>
+                                            </div>
+                                            {% endfor %}
+                                            <div id="{{ entry.form_name }}-{{ entry.id }}-formdata" style="display: none;">{{ result }}</div>
+                                        {% else %}
+                                            {{ result }}
+                                            <span class="mt-3 highlight">
+                                                This form data cannot be re-sent because it was too large
+                                                to be parsed correctly.
+                                            </span>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+
+                <div class="col-md">
+                    <div class="title pad-container">Unsent Newsletter Data</div>
+                    <ul style="margin-top: 15px;">
+                        {% for entry in newsletter_send_failures %}
+                        <li class="mt-3 mr-4">
+                            <div class="collapse-container shadow mb-1">
+                                <span class="font-weight-bolder">{{ entry.template_used }} Template</span>
+                                <div>
+                                    <span class="float-right mt-1">
+                                        <a class="bg-light p-1" href="{% url 'admin_pages:delete_newsletter_send_failure' entry.id %}" style="color: red; border-radius: 5px;">
+                                            Delete
+                                        </a>
+                                    </span>
+                                    {% if entry.resent_ok %}
+                                    <span class="float-right mr-1" title="Email successfully resent">
+                                        ✅&ensp;
+                                    </span>
+                                    {% endif %}
+                                    <!--
+                                    <span class="float-right mt-1 mr-2">
+                                        <a class="bg-light p-1" href="#" style="border-radius: 5px;">
+                                            Resend
+                                        </a>
+                                    </span>
+                                    -->
+                                    <br>
+                                </div>
+                            </div>
+                            <div class="expand-content shadow align-items-center">
+                                <div class="row ml-2 mr-2">
+                                    <div class="col-md">
+                                        <span class="font-weight-bolder fs-400">Timestamp:</span>
+                                        &ensp;{{ entry.timestamp|date:"d M, Y" }} {{ entry.timestamp|time:"h:i" }}
+                                    </div>
+                                    <div class="col-sm">
+                                        <span class="font-weight-bolder fs-400">To addr:</span>
+                                        &ensp;&ensp;{{ entry.to }}
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row ml-2 mr-2">
+                                    <div class="col">
+                                        <span class="font-weight-bolder fs-400">Template ID:</span>
+                                        &ensp;&ensp;{{ entry.template_id }}
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row ml-2 mr-2">
+                                    <div class="col">
+                                        <span class="font-weight-bolder fs-400">Exception:</span>
+                                        &ensp;&ensp;{{ entry.exception }}
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+{% block body_scripts %}
+<script>
+    function reloadPage(selected, csrfToken) {
+        window.location.replace('/admin_pages/failures/mail_send_failures/' + selected.value);
+    }
+</script>
+
+<script src="{% static 'admin_pages/js/collapse-container-toggler.js' %}"></script>
+<script src="{% static 'admin_pages/js/resubmit-forms.js' %}"></script>
+{% endblock body_scripts %}

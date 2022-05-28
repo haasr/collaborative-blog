@@ -1,0 +1,58 @@
+{% extends "../../admin_pages_base.html" %}
+
+{% block content %}
+<div class="d-flex justify-content-center" style="padding: 1%;">
+	<a href="{% url 'admin_pages:admin_index' %}">
+		<button class="btn btn-warning">&#60; Back to Menu</button>
+	</a>
+</div>
+
+{% load crispy_forms_tags %}
+<div class="container-sm flow">
+	<div class="lightly-pad-container shadow text-break border-dotted-brand-green">
+		<div class="text-center title"><h2>Manage Subscriber Newsletter</h2></div>
+		<div class="form-container">
+			<form method='post' enctype='multipart/form-data'>
+				{% crispy form %}
+				<div class="form-row">
+                    <div class="col-25">
+                        &nbsp;
+                    </div>
+                    <div class="col-25" style="text-align: left;">
+                        <button class="btn btn-primary" type="submit">Save</button>
+                    </div>
+                    <div class="col-25" style="text-align: left;">
+                        <a href="{% url 'admin_pages:admin_index' %}"><button class="btn btn-danger" type="button">Cancel</button></a>
+                    </div>
+                </div>
+			</form>
+		</div>
+	</div>
+</div>
+{% endblock content %}
+
+{% block body_scripts %}
+<script>
+	tinymce.init({
+		selector: 'textarea',
+		plugins: 'codesample',
+		content_style: "body { line-height: 1; }",
+		codesample_dialog_width: '400',
+		codesample_dialog_height: '400',
+		codesample_languages: [
+		{ text: 'HTML/XML', value: 'markup' },
+		{ text: 'PowerShell', value: '' },
+		{ text: 'JavaScript', value: 'javascript' },
+		{ text: 'CSS', value: 'css' },
+		{ text: 'PHP', value: 'php' },
+		{ text: 'Ruby', value: 'ruby' },
+		{ text: 'Python', value: 'python' },
+		{ text: 'Java', value: 'java' },
+		{ text: 'C', value: 'c' },
+		{ text: 'C#', value: 'csharp' },
+		{ text: 'C++', value: 'cpp' }
+	],
+  		toolbar: 'undo redo | styleselect | codesample | bold italic | alignleft aligncenter alignright alignjustify | outdent indent'
+	});
+</script>
+{% endblock body_scripts %}

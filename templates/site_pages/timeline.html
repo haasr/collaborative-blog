@@ -1,0 +1,66 @@
+{% extends "./site_pages_base.html" %}
+{% load static %}
+{% load blogqueries %}
+
+{% block page_title %}Timeline{% endblock page_title %}
+
+{% block content %}
+<div class="content-container-md-clear mt-4">
+    <div class="center bg-brand-green shadow p-3" style="border-top-left-radius: 5px; border-top-right-radius: 5px;">
+        <h1 class="text-white text-center">Timeline</h1>
+    </div>
+    <div class="center border-brand-green shadow" style="border-bottom-left-radius: 5px; border-bottom-right-radius: 5px;">
+        <div class="content-container-sm-clear bg-front-neutral pt-3">
+            <p class="p-2 border-dotted-brand-green text-center fs-400">
+                <svg xmlns="http://www.w3.org/2000/svg" width="2.1rem" height="2.1rem" fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16"
+                    style="float: left;">
+                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                    <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
+                </svg>
+                &nbsp;Timeline reflects the years and months in which each
+                post was first created. Click linked years or months to view
+                posts first created during those periods.
+            </p>
+        </div>
+        {% for year_row in years %}
+        <div class="row">
+            {% for year in year_row %}
+            <div class="col-lg posts-calendar">
+                {% count_posts_in_year year as y_posts_count %}
+                <a href="{% url 'timeline_year' year %}">
+                    <span class="title-bolder highlight">
+                        {{ year }}<sup class="text-front-neutral fs-400" style="font-style: italic;">({{ y_posts_count }})</sup>
+                    </span>
+                </a>
+                <hr>
+                {% for month_row in months %}
+                <div class="row" style="line-height: 2.5rem;">
+                    {% for month in month_row %}
+                    {% count_posts_in_month month year as m_posts_count %}
+                    <div class="col-md fs-400">
+                        {% if m_posts_count != 0 %}
+                        <a href="{% url 'timeline_month' year month %}">
+                            <span class="highlight">{{ month }}<sup style="font-style: italic;">({{ m_posts_count }})</sup></span>
+                        </a>
+                        {% else %}
+                        <span class="text-accent">{{ month }}</span>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endfor %}
+            </div>
+            {% endfor %}
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock content %}
+
+{% block body_scripts %}
+<script>
+    $(document).ready(function() {
+        setActiveLink('timeline');
+    });
+</script>
+{% endblock body_scripts %}

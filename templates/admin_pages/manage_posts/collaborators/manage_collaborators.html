@@ -1,0 +1,60 @@
+{% extends "../../admin_pages_base.html" %}
+
+{% block content %}
+{% load crispy_forms_tags %}
+<br>
+<div class="container-sm flow">
+    <div class="lightly-pad-container shadow text-break text-center border-dotted-brand-green">
+        <div class="text-center title"><h2>Manage Collaborators</h2></div>
+        <div class="form-container">
+            <form action="{% url 'admin_pages:manage_post_collaborators' post_id %}" method='post'>
+                {% crispy form %}
+                <div class="form-row">
+                    <div class="col-25">
+                        &nbsp;
+                    </div>
+                    <div class="col-25" style="text-align: left;">
+                        <button class="btn btn-primary" type="submit">Save</button>
+                    </div>
+                    <div class="col-25" style="text-align: left;">
+                        <a href="{% url 'admin_pages:manage_posts' %}"><button class="btn btn-danger" type="button">Cancel</button></a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+{% block body_scripts %}
+<script>
+    $(document).ready(function() { // Preselects the authors previously added!
+        let inputs = document.getElementsByTagName('input');
+        let authorsSelected = JSON.parse('{{ authors_selected|escapejs }}');
+        let authorId = parseInt('{{ author_id|escapejs }}');
+
+        let inputNodeToRemove = null;
+
+        for (let i = 0; i < inputs.length; i++) {
+            input = inputs[i];
+
+            // Author removed from choices in form...but not soon
+            // enough apparently.
+            if (input.value == authorId) {
+                inputNodeToRemove = input.parentNode;
+            }
+
+            let j; // Declare j 1 scope up to access after the loop.
+            for (j = 0; j < authorsSelected.length; j++) {
+                if (input.value == authorsSelected[j] )
+                    input.checked = true;
+            }
+        }
+
+        try {
+            inputNodeToRemove.remove(); // Byeeee
+        } catch { } //meh
+
+    });
+    </script>
+{% endblock body_scripts %}

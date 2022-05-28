@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+<title>{{ meta_title }}: Login</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <link rel="stylesheet" href="{% static 'css/forms.css' %}">
+  <link rel="icon" href="{% static 'images/favicon.ico' %}">
+  {% block more_links %}{% endblock more_links %}
+
+  <style>
+    body { line-height: 2rem; }
+    ul { list-style: none; }
+  	li { color: red; }
+    p { margin-top: 1rem; }
+    button { margin-top: 2rem; }
+    .btn-primary { margin-left: 1rem; }
+    span.asteriskField { display: none; }
+  </style>
+</head>
+
+<body>
+<nav class="navbar navbar-expand-md navbar-light static-top bg-white">
+  <div class="container">
+    <a class="navbar-brand" href="{% url 'index' %}">
+      {% load static %}
+      <img src="{% static 'site_pages/site_look/nav_image/nav_image.png' %}"
+        alt="Navigation icon" style="{{ navigation_img_size }}">
+    </a>
+  </div>
+</nav>
+
+<div class="login-container flow shadow mb-5" style="border: 1px dotted hsl( var(--clr-brand-green) );">
+  {% block content %}{% endblock content %}
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+{% block body_scripts %}{% endblock body_scripts %}
+</body>
+</html>
+

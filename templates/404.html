@@ -1,0 +1,37 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+            integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+        <style>
+            body {
+		        background-repeat: no-repeat;
+                background-attachment: fixed;
+                background-size: cover;
+            }
+            h1 {
+                text-shadow: 1px 2px 3px #000000;
+            }
+            a#bg-img-credit {
+                color: white;
+            }
+        </style>
+    </head>
+    {% with 'images/404.jpg' as static_bg %}
+    <body style="background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.2)), url('{% static static_bg %}');">
+    {% endwith %}
+        <div class="text-center" id="splash-img-container">
+            <h1 class="text-white" style="padding: 4%;">Much like me, this page is empty.</h1>
+            <div class="text-white font-weight-bolder" style="font-size: 2em">
+                Looking for <a href="{% url 'index' %}"><button class="btn btn-primary font-weight-bolder shadow" style="font-size: 1.1em; margin-top: -12px;">this page</button></a>&nbsp;?
+            </div>
+            <div style="padding-top: 5%;">
+                <a id="bg-img-credit" href='https://www.freepik.com/free-photos-vectors/business'>
+                    Business vector created by pikisuperstar - www.freepik.com
+                </a>
+            </div>
+        </div>
+    </body>
+</html>

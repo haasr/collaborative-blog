@@ -1,0 +1,195 @@
+{% extends "./site_pages_base.html" %}
+{% load static %}
+{% load humanize %}
+
+{% block page_title %}{{ post.title }}{% endblock page_title %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md" style="max-width: 1000px; padding: 3%;">
+        <div class="content-container container-color-neutral shadow"
+            style="border-bottom: 3px solid rgba(234, 234, 234, 0.8); padding-top: 2%;">
+            <h1 class="title" style="text-align: center; font-weight: bold;">
+                {{ post.title }}
+            </h1>
+        </div>
+        <div class="content-container container-color-neutral"
+            id="post-{{ post.id }}">
+            {% if post.box_img_file_name != '' %}
+            <div>
+                {% with 'site_pages/posts/images/'|add:post.box_img_file_name as post_img_static %}
+                <img class="shadow" src="{% static post_img_static %}"
+                    alt="{{ post.box_img_alt }}"
+                    style="width: 100%; height: 300px; object-fit: cover; border-radius: 5px;">
+                {% endwith %}
+                
+                {% if post.box_img_credit != '' %}
+                <p class="footnote">
+                    {{ post.box_img_credit|safe}}
+                </p>
+                {% endif %}
+            </div>
+            {% endif %}
+            <div style="margin-top: 2%;">
+                <a href="{% url 'author_profile' post.author.id %}">
+                    {% if post.author.profile_icon_file_name == '' %}
+                    <img src="{% static 'images/author-profile.png' %}"
+                        alt="{{ post.author.preferred_name }}'s Profile Image"
+                        style="width: 50px; height: 50px; object-fit: cover; border-radius: 5px;">
+                    {% else %}
+                    {% with 'site_pages/authors/profile_images/'|add:post.author.profile_icon_file_name as profile_icon_static %}
+                    <img src="{% static profile_icon_static %}"
+                        alt="{{ post.author.preferred_name }}'s Profile Image"
+                        style="width: 50px; height: 50px; object-fit: cover; border-radius: 5px;">
+                    {% endwith %}
+                    {% endif %}
+                    <span class="highlight" style="font-weight: bold;">
+                        {{ post.author.preferred_name }}
+                    </span>
+                </a>    
+                <span class="highlight">
+                    &nbsp; | &nbsp;
+                    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" class="bi bi-watch" viewBox="0 0 16 16">
+                    <path d="M8.5 5a.5.5 0 0 0-1 0v2.5H6a.5.5 0 0 0 0 1h2a.5.5 0 0 0 .5-.5V5z"/>
+                    <path d="M5.667 16C4.747 16 4 15.254 4 14.333v-1.86A5.985 5.985 0 0 1 2 8c0-1.777.772-3.374 2-4.472V1.667C4 .747 4.746 0 5.667 0h4.666C11.253 0 12 .746 12 1.667v1.86a5.99 5.99 0 0 1 1.918 3.48.502.502 0 0 1 .582.493v1a.5.5 0 0 1-.582.493A5.99 5.99 0 0 1 12 12.473v1.86c0 .92-.746 1.667-1.667 1.667H5.667zM13 8A5 5 0 1 0 3 8a5 5 0 0 0 10 0z"/>
+                    </svg>
+                    {{ post.og_date }},
+                </span>
+                <span class="highlight">
+                    &nbsp;Last edited {{ post.date }}
+                </span>
+                {% if post.location != '' %}
+                <span class="highlight">
+                    &nbsp; | &nbsp;
+                    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" class="bi bi-geo-alt-fill" viewBox="0 0 16 16">
+                        <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/>
+                    </svg>
+                    {{ post.location }}
+                </span>
+                {% endif %}
+                <div id="post-container">
+                    {{ post.box_content_text|safe }}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xs" style="max-width: 318px; padding: 3em;">
+        <div class="container">
+            <br>
+            <span class="text-left" style="font-size: 32px; font-weight: 500;">Topics</span>
+            <ul class="list" style="margin-top: 6px; padding: 0;">
+            {% for topic in post.topics.all %}
+            <li class="text-left" style="margin: 0; padding: 0; list-style: none;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#448980" class="bi bi-tag-fill" viewBox="0 0 16 16">
+                    <path d="M2 1a1 1 0 0 0-1 1v4.586a1 1 0 0 0 .293.707l7 7a1 1 0 0 0 1.414 0l4.586-4.586a1 1 0 0 0 0-1.414l-7-7A1 1 0 0 0 6.586 1H2zm4 3.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/>
+                </svg>
+                <a href="{% url 'topic_posts' topic.id %}" class="topic-name">
+                    <span class="highlight">{{ topic.name }}</span>
+                </a>
+            </li>
+            {% endfor %}
+            </ul>
+            <span class="text-left" style="font-size: 32px; font-weight: 500;">Author</span>
+            <br>
+            <a href="{% url 'author_profile' post.author.id %}">
+                <span class="highlight">{{ post.author.preferred_name }}</span>
+            </a>
+            {% if has_collaborators %}
+            <hr>
+            <span class="text-left" style="font-size: 32px; font-weight: 500;">Contributors</span>
+            {% for collab in post_collaborators %}
+            <a href="{% url 'author_profile' collab.author.id %}">
+                <span class="highlight">{{ collab.author.preferred_name }}</span><br>
+            </a>
+            {% endfor %}
+            {% endif %}
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md" style="max-width: 1000px; padding: 3%;">
+        <div class="content-container container-color-neutral"
+            style="padding-top: 2%; background-color: #F8F9FA;">
+            <a id="post-comments" class="title" style="text-align: center; font-weight: bold;">
+                Comments
+            </a>
+            <div class="d-flex justify-content-center" style="padding: 2%;">
+                <a href="{% url 'post_comment_new_thread' post.slug %}">
+                    <button class="btn bttn-outline-brand-green">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" class="bi bi-chat-left-text" viewBox="0 0 16 16">
+                            <path d="M14 1a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H4.414A2 2 0 0 0 3 11.586l-2 2V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12.793a.5.5 0 0 0 .854.353l2.853-2.853A1 1 0 0 1 4.414 12H14a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
+                            <path d="M3 3.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zM3 6a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9A.5.5 0 0 1 3 6zm0 2.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5z"/>
+                          </svg>
+                        Comment
+                    </button>
+                </a>
+            </div>
+            {% for thread in threads %}
+            <span class="footnote">{{ thread.og_date|naturaltime }}&nbsp;{{ og_date.hour }}</span>
+            <div class="container">
+                {% for comment in thread.comment_set.all %}
+                <span style="float: right;">
+                    <a class="text-danger" href="{% url 'admin_delete_comment' post.slug comment.id %}">
+                        Delete Comment
+                    </a>
+                </span>
+                {% if not comment.orig %}
+                <div style="margin-left: 5%;">
+                    <a href="{% url 'post_comment_existing_thread' post.slug thread.id %}">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="1.1em" height="1.1em" fill="currentColor" class="bi bi-reply" viewBox="0 0 16 16">
+                            <path d="M6.598 5.013a.144.144 0 0 1 .202.134V6.3a.5.5 0 0 0 .5.5c.667 0 2.013.005 3.3.822.984.624 1.99 1.76 2.595 3.876-1.02-.983-2.185-1.516-3.205-1.799a8.74 8.74 0 0 0-1.921-.306 7.404 7.404 0 0 0-.798.008h-.013l-.005.001h-.001L7.3 9.9l-.05-.498a.5.5 0 0 0-.45.498v1.153c0 .108-.11.176-.202.134L2.614 8.254a.503.503 0 0 0-.042-.028.147.147 0 0 1 0-.252.499.499 0 0 0 .042-.028l3.984-2.933zM7.8 10.386c.068 0 .143.003.223.006.434.02 1.034.086 1.7.271 1.326.368 2.896 1.202 3.94 3.08a.5.5 0 0 0 .933-.305c-.464-3.71-1.886-5.662-3.46-6.66-1.245-.79-2.527-.942-3.336-.971v-.66a1.144 1.144 0 0 0-1.767-.96l-3.994 2.94a1.147 1.147 0 0 0 0 1.946l3.994 2.94a1.144 1.144 0 0 0 1.767-.96v-.667z"/>
+                        </svg>
+                        Reply
+                    </a>
+                    <span style="font-weight: bold;">&emsp;{{ comment.name }}</span>
+                    <span class="highlight" style="float: right;">&emsp;{{ comment.og_date|naturaltime }}&emsp;</span>
+                </div>
+                <p class="border-dotted-brand-green" style="margin-left: 5%; border-radius: 5px; margin-top: 5px; line-height: 1.5rem;">
+                    {{ comment.text|safe|linebreaksbr }}
+                </p>
+                {% else %}
+                <a href="{% url 'post_comment_existing_thread' post.slug thread.id %}">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="1.1em" height="1.1em" fill="currentColor" class="bi bi-reply" viewBox="0 0 16 16">
+                        <path d="M6.598 5.013a.144.144 0 0 1 .202.134V6.3a.5.5 0 0 0 .5.5c.667 0 2.013.005 3.3.822.984.624 1.99 1.76 2.595 3.876-1.02-.983-2.185-1.516-3.205-1.799a8.74 8.74 0 0 0-1.921-.306 7.404 7.404 0 0 0-.798.008h-.013l-.005.001h-.001L7.3 9.9l-.05-.498a.5.5 0 0 0-.45.498v1.153c0 .108-.11.176-.202.134L2.614 8.254a.503.503 0 0 0-.042-.028.147.147 0 0 1 0-.252.499.499 0 0 0 .042-.028l3.984-2.933zM7.8 10.386c.068 0 .143.003.223.006.434.02 1.034.086 1.7.271 1.326.368 2.896 1.202 3.94 3.08a.5.5 0 0 0 .933-.305c-.464-3.71-1.886-5.662-3.46-6.66-1.245-.79-2.527-.942-3.336-.971v-.66a1.144 1.144 0 0 0-1.767-.96l-3.994 2.94a1.147 1.147 0 0 0 0 1.946l3.994 2.94a1.144 1.144 0 0 0 1.767-.96v-.667z"/>
+                    </svg>
+                    Reply
+                </a>
+                <span style="font-weight: bold;">&emsp;{{ comment.name }}</span>
+                <p class="border-dotted-brand-green" style="border-radius: 5px; margin-top: 5px;">
+                    {{ comment.text|safe|linebreaksbr }}
+                </p>
+                {% endif %}
+                {% endfor %}
+                {% if user.is_staff %}
+                <div class="mt-2 text-right">
+                    <a href="{% url 'admin_delete_thread' post.slug thread.id %}">
+                        <button class="btn btn-danger">Delete Thread</button>
+                    </a>
+                </div>
+                {% endif %}
+                <hr>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="col-xs" style="max-width: 318px; padding: 3em;">&nbsp;</div>
+</div>
+
+{% if goto_section != '' %}
+<script>window.location.hash = '#{{ goto_section }}';</script>
+{% endif %}
+{% endblock content %}
+
+{% block body_scripts %}
+<script src="{% static 'js/prism.js' %}" data-manual></script>
+<script type="application/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.19.0/components/prism-powershell.min.js"></script>
+
+<script>
+    Prism.hooks.add("before-highlight", function (env) {
+        env.code = env.element.innerText;
+    });
+
+    code = document.getElementsByTagName('code');
+    Array.from(code).forEach(el => { Prism.highlightElement(el) });
+</script>
+{% endblock body_scripts %}

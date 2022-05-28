@@ -1,0 +1,52 @@
+{% extends "../../admin_pages_base.html" %}
+
+{% block content %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+<br>
+<div class="container-sm flow">
+	<div class="lightly-pad-container shadow text-break border-dotted-brand-green">
+		<div class="text-center title"><h2>Replace Post Image</h2></div>
+        <div class="d-flex justify-content-center">
+            {% with 'site_pages/posts/images/'|add:post.box_img_file_name as post_icon_static %}
+            <img class="border-brand-green" id="post-icon" style="border-radius: 5px; max-width: 300px;"
+                src="{% static post_icon_static %}" alt="{{ post.box_img_alt }}">
+            {% endwith %}
+        </div>
+        <br>
+		<div class="form-container">
+			<form method='post' enctype='multipart/form-data'>
+				{% crispy form %}
+				<div class="form-row">
+                    <div class="col-25">
+                        &nbsp;
+                    </div>
+                    <div class="col-25" style="text-align: left;">
+                        <button class="btn btn-primary" type="submit">Save</button>
+                    </div>
+                    <div class="col-25" style="text-align: left;">
+                        <a href="{% url 'admin_pages:manage_posts' %}"><button class="btn btn-danger" type="button">Cancel</button></a>
+                    </div>
+                </div>
+			</form>
+		</div>
+	</div>
+</div>
+{% endblock content %}
+
+{% block body_scripts %}
+<script>
+    $("#id_box_img").on("change", function() {
+        let input = this;
+        let filename = $(this).val();
+        let ext = filename.substring(filename.lastIndexOf('.') + 1).toLowerCase();
+
+        var reader = new FileReader();
+        reader.onload = function (e) {
+            $('#post-icon').attr('src', e.target.result);
+        }
+        reader.readAsDataURL(input.files[0]);
+    });
+</script>
+{% endblock body_scripts %}

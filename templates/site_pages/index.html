@@ -1,0 +1,253 @@
+{% extends "./site_pages_base.html" %}
+{% load static %}
+{% load texttransform %}
+
+{% block page_title %}Homepage{% endblock page_title %}
+
+{% block content %}
+{% if home.alert_banner != '' %}
+<div class="container shadow" style="border-radius: 5px;">
+    <p>{{ home.alert_banner|safe|linebreaksbr }}</p>
+</div>
+{% endif %}
+
+{% with 'site_pages/home/bg_image/background.png' as background_img_static %}
+<div class="hero-image shadow" style="margin-top: -4px; background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.2)), url('{% static background_img_static %}');">
+{% endwith %}
+    <div class="hero-container">
+        <div class="content-container-md-clear">
+            {% if home.tagline != '' %}
+            {% if home.tagline_size == 'h1' %}
+            {% if home.tagline_shadow %}
+            <div class="container fs-700 textshadow" style="color: {{ home.tagline_color }}">
+                {{ home.tagline|safe|linebreaksbr }}</div>
+            {% else %}
+            <div class="container fs-500" style="color: {{ home.tagline_color }}">
+                {{ home.tagline|safe|linebreaksbr }}</div>
+            {% endif %}
+            {% elif home.tagline_size == 'h2' %}
+            {% if home.tagline_shadow %}
+            <div class="container fs-600 textshadow" style="color: {{ home.tagline_color }}">
+                {{ home.tagline|safe|linebreaksbr }}</div>
+            {% else %}
+            <div class="container fs-600" style="color: {{ home.tagline_color }}">
+                {{ home.tagline|safe|linebreaksbr }}</div>
+            {% endif %}
+            {% else %}
+            {% if home.tagline_shadow %}
+            <div class="container fs-500 textshadow" style="color: {{ home.tagline_color }}">
+                {{ home.tagline|safe|linebreaksbr }}</div>
+            {% else %}
+            <div class="container fs-500" style="color: {{ home.tagline_color }}">
+                {{ home.tagline|safe|linebreaksbr }}</div>
+            {% endif %}
+            {% endif %}
+            {% endif %}
+        </div>
+        <div class="pad-container home-btn-links">
+            {% if home.about_label != '' %}
+            <a href="{% url 'about' %}">
+                <button class="btn btn-outline-light shadow-sm">
+                    {{ home.about_label }}
+                </button>
+            </a>
+            {% endif %}
+            {% if home.donate_label != '' %}
+            <span class="space-left-sm">
+                <a href="#" target="_blank">
+                    <button class="btn btn-outline-light shadow-sm">
+                        {{ home.donate_label }}
+                    </button>
+                </a>
+            </span>
+            {% endif %}
+        </div>
+        <div class="container text-center pad-container">
+            {% if home.email_addr != '' %}
+            <a href="mailto:{{ home.email_addr }}" target="_blank" class="hero-fa fa fa-envelope" alt="Email link"></a>
+            {% endif %}
+            {% if home.facebook_link != '' %}
+            <a href="{{ home.facebook_link }}" target="_blank" class="hero-fa fa fa-facebook" alt="Facebook link"></a>
+            {% endif %}
+            {% if home.github_link != '' %}
+            <a href="{{ home.github_link }}" target="_blank" class="hero-fa fa fa-github" alt="Github link"></a>
+            {% endif %}
+            {% if home.instagram_link != '' %}
+            <a href="{{ home.instagram_link }}" target="_blank" class="hero-fa fa fa-instagram" alt="Instagram link"></a>
+            {% endif %}
+            {% if home.twitter_link != '' %}
+            <a href="{{ home.twitter_link }}" target="_blank" class="hero-fa fa fa-twitter" alt="Twitter link"></a>
+            {% endif %}
+            {% if home.youtube_link != '' %}
+            <a href="{{ home.youtube_link }}" target="_blank" class="hero-fa fa fa-youtube" alt="YouTube link"></a>
+            {% endif %}
+        </div>
+        <div class="d-flex justify-content-center lightly-pad-container">
+            <a class="ct-btn-scroll ct-jst-btn-scroll" href="#featured"><img src="{% static 'site_pages/home/arrow-down.png' %}" alt="Down arrow icon"></a>
+        </div>
+    </div>
+</div>
+
+<div class="featured-container border-brand-green shadow mt-4">
+    <div class="mt-4" id="featured">
+        <div class="content-container container-color-neutral shadow">
+            <h2>Featured Posts</h2>
+        </div>
+        {% for post in featured_posts %}
+        <div class="content-container lightly-pad-container container-color-neutral featured-post" id="post-{{ post.id }}" style="display: none;">
+            <div class="row" style="margin-top: 1%; padding-bottom: 2%; padding-right: 2%;">
+                <div class="col-md" style="border-radius: 5px;">
+                    <h3 class="mb-2 text-center">
+                        {{ post.title|truncatechars:65 }}
+                    </h3>
+                    <span class="highlight">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" class="bi bi-watch" viewBox="0 0 16 16">
+                            <path d="M8.5 5a.5.5 0 0 0-1 0v2.5H6a.5.5 0 0 0 0 1h2a.5.5 0 0 0 .5-.5V5z"/>
+                            <path d="M5.667 16C4.747 16 4 15.254 4 14.333v-1.86A5.985 5.985 0 0 1 2 8c0-1.777.772-3.374 2-4.472V1.667C4 .747 4.746 0 5.667 0h4.666C11.253 0 12 .746 12 1.667v1.86a5.99 5.99 0 0 1 1.918 3.48.502.502 0 0 1 .582.493v1a.5.5 0 0 1-.582.493A5.99 5.99 0 0 1 12 12.473v1.86c0 .92-.746 1.667-1.667 1.667H5.667zM13 8A5 5 0 1 0 3 8a5 5 0 0 0 10 0z"/>
+                        </svg>
+                        Last modified {{ post.date }}
+                    </span>
+                    {% if post.location != '' %}
+                    <br>
+                    <span class="highlight">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" class="bi bi-geo-alt-fill" viewBox="0 0 16 16">
+                            <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/>
+                        </svg>
+                        {{ post.location }}
+                    </span>
+                    <span>&nbsp; • &nbsp;</span>
+                    {% endif %}
+                    <span class="highlight">
+                        <a href="{% url 'author_profile' post.author.id %}" class="post-author">
+                            <span class="highlight">{{ post.author.preferred_name }}</span>
+                        </a>
+                    </span>
+                    <hr>
+                    <div class="d-flex justify-content-center">
+                        {% if post.box_img_file_name == '' %}
+                        <img class="shadow" src="{% static 'images/null-image.png' %}" alt="Filler Image"
+                            style="width: 80%; height: 220px; object-fit: cover;">
+                        {% else %}
+                        {% with 'site_pages/posts/images/'|add:post.box_img_file_name as post_img_static %}
+                        <img class="shadow" src="{% static post_img_static %}" alt="{{ post.box_img_alt }}"
+                            style="width: 80%; height: 220px; object-fit: cover; border-radius: 3px;">
+                        {% endwith %}
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="col-lg" style="line-height: 1.4em; border-radius: 5px; border-left: 1px solid rgba(0, 0, 0, 0.2);">
+                    <div style="text-align: left;">
+                        {{ post.box_content_text|truncatechars:600|remove_headers|safe|linebreaksbr }}
+                    </div>
+                    <div class="d-flex justify-content-center" style="margin-top: 1rem;">
+                        <a href="{% url 'post' post.slug %}">
+                            <button class="btn bttn-outline-brand-green shadow-sm">
+                                Read More
+                            </button>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="content-container container-color-neutral shadow mt-4" style="border-bottom: 3px solid rgba(234, 234, 234, 0.8);">
+        <h2 style="text-align: center;">Recent Posts</h2>
+    </div>
+    {% for post in posts %}
+    <div class="content-container lightly-pad-container container-color-neutral">
+        <div class="row" style="padding: 2%;">
+            <div class="col-md" style="border-radius: 5px;">
+                <h3 class="mb-2 text-center">
+                    {{ post.title|truncatechars:65 }}
+                </h3>
+                <p class="text-center">
+                    <span class="highlight">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" class="bi bi-watch" viewBox="0 0 16 16">
+                            <path d="M8.5 5a.5.5 0 0 0-1 0v2.5H6a.5.5 0 0 0 0 1h2a.5.5 0 0 0 .5-.5V5z"/>
+                            <path d="M5.667 16C4.747 16 4 15.254 4 14.333v-1.86A5.985 5.985 0 0 1 2 8c0-1.777.772-3.374 2-4.472V1.667C4 .747 4.746 0 5.667 0h4.666C11.253 0 12 .746 12 1.667v1.86a5.99 5.99 0 0 1 1.918 3.48.502.502 0 0 1 .582.493v1a.5.5 0 0 1-.582.493A5.99 5.99 0 0 1 12 12.473v1.86c0 .92-.746 1.667-1.667 1.667H5.667zM13 8A5 5 0 1 0 3 8a5 5 0 0 0 10 0z"/>
+                        </svg>
+                        Last modified {{ post.date }}
+                    </span>
+                    {% if post.location != '' %}
+                    <br>
+                    <span class="highlight">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" class="bi bi-geo-alt-fill" viewBox="0 0 16 16">
+                            <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/>
+                        </svg>
+                        {{ post.location }}
+                    </span>
+                    <span>&nbsp; • &nbsp;</span>
+                    {% endif %}
+                    <span class="highlight">
+                        <a href="{% url 'author_profile' post.author.id %}" class="post-author">
+                            <span class="highlight">{{ post.author.preferred_name }}</span>
+                        </a>
+                    </span>
+                </p>
+                <hr>
+                <div class="d-flex justify-content-center">
+                    {% if post.box_img_file_name == '' %}
+                    <img class="shadow" src="{% static 'images/null-image.png' %}" alt="Filler Image"
+                        style="width: 70%; height: 200px; object-fit: cover;">
+                    {% else %}
+
+                    {% with 'site_pages/posts/images/'|add:post.box_img_file_name as post_img_static %}
+                    <img class="shadow" src="{% static post_img_static %}" alt="{{ post.box_img_alt }}"
+                        style="width: 70%; height: 200px; object-fit: cover; border-radius: 3px;">
+                    {% endwith %}
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-lg" style="line-height: 1.4em; border-radius: 5px; border-left: 1px solid rgba(0, 0, 0, 0.2);">
+                <div style="text-align: left;">
+                    {{ post.box_content_text|truncatechars:600|remove_headers|safe|linebreaksbr }}
+                </div>
+                <div class="d-flex justify-content-center" style="margin-top: 1rem;">
+                    <a href="{% url 'post' post.slug %}">
+                        <button class="btn bttn-outline-brand-green shadow-sm">
+                            Read More
+                        </button>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock content %}
+
+{% block body_scripts %}
+<script>
+    var lastContainer = document.getElementsByClassName('featured-post')[0];
+    var prevContainer;
+    var nextContainer;
+
+    function makeVisible(container) {
+        lastContainer.style.display = 'none';
+        lastContainer = container;
+        lastContainer.style.display = 'block';
+    }
+
+    $(document).ready(function() {
+        setActiveLink('home');
+
+        var i = 0;
+        var containers = document.getElementsByClassName('featured-post');
+        var containers_len = containers.length;
+
+        makeVisible(containers[(containers_len - 1)]);
+        setInterval(
+            function clickContainers() {
+                if ( i===containers_len ) {
+                    i = 0;
+                }
+                makeVisible(containers[i]);
+                i++;
+            },
+            4700
+        );
+    });
+</script>
+{% endblock body_scripts %}

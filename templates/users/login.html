@@ -1,0 +1,39 @@
+{% extends './users_base.html' %}
+
+{% block page_title %}Login{% endblock page_title %}
+
+{% block page_style %}
+span.asteriskField { display: none; }
+{% endblock page_style %}
+
+{% block content %}
+{% load crispy_forms_tags %}
+<div class="login-container shadow" style="border: 1px dotted hsl( var(--clr-brand-green) );">
+	<h2 class="text-center title-bolder">Sign in</h2>
+	{% for message in messages %}
+    <div class="alert alert-warning">
+        <a class="close" href="#" data-dismiss="alert">×</a>
+           {{ message }}
+    </div>
+    {% endfor %}
+    <form action="{% url 'users:login' %}" method='post'>
+        {% if form.errors %}
+        {% for field in form %}
+           {% for error in field.errors %}
+              <div class="alert alert-danger">
+                   <strong>{{ error|escape }}</strong>
+              </div>
+           {% endfor %}
+        {% endfor %}
+        {% endif %}
+        {% crispy form %}
+        <div class="d-flex pad-container justify-content-center">
+            <button class="btn bttn-brand-green" type="submit" style="margin-top: 1em; padding-left: 10%; padding-right: 10%;">
+                Log In
+            </button>
+        </div>
+	</form>
+	<br>
+	Forgot your password? <a href="{% url 'users:reset_password' %}">Reset it here</a>.
+</div>
+{% endblock content %}

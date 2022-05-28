@@ -1,0 +1,56 @@
+{% extends "../admin_pages_base.html" %}
+
+{% load static %}
+{% block content %}
+<div class="d-flex justify-content-center" style="padding: 1%;">
+    <a href="{% url 'admin_pages:admin_index' %}">
+        <button class="btn btn-warning">&#60; Back to Menu</button>
+    </a>
+</div>
+
+<div class="container-md flow">
+    <div class="lightly-pad-container shadow text-break border-dotted-brand-green"
+        style="background-color: #858383;">
+        <h1 class="text-center text-white pt-3">Manage Topics</h1>
+        <p class="text-center pt-4 pb-4">
+            <a href="{% url 'admin_pages:manage_topics_header' %}">
+                <button class="btn btn-primary">Edit Topics Header</button>
+            </a>
+        </p>
+        <div class="container pad-container" style="background-color: #B3BBC3; border-radius: 5px;">
+            <div id="topics-list" style="background-color: #F1F1F1; border-radius: 5px;">
+                <div class="d-flex justify-content-center p-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16" height="36" class="bi bi-search pl-1 pr-1" width="30">
+                        <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+                    </svg>
+                    <input type="text" class="search" placeholder="Search topic by name">
+                </div>
+                <ul class="list" style="margin-top: 15px;">
+                    {% for topic in topics %}
+                    <li class="mr-5">
+                        <div class="row fs-400" style="border-radius: 5px; background-color: white;">
+                            <div class="col-sm topic-name">{{ topic.name }}</div>
+                            <div class="col-md">
+                                <a href="{% url 'admin_pages:edit_topic' topic.id %}">
+                                    Edit
+                                </a>&ensp;|&ensp;
+                                <a href="{% url 'admin_pages:confirm_delete_topic' topic.id %}"
+                                    style="color: red;">
+                                    Delete
+                                </a>
+                            </div>
+                        </div>
+                        <hr>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+{% block body_scripts %}
+<script src="{% static 'js/list.js' %}"></script>
+<script src="{% static 'admin_pages/js/topics-list.js'%}"></script>
+{% endblock body_scripts %}

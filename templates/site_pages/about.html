@@ -1,0 +1,95 @@
+{% extends "./site_pages_base.html" %}
+{% load static %}
+
+{% block page_title %}About{% endblock page_title %}
+
+{% block content %}
+<div class="content-container-md-clear border-brand-green mt-4 mb-4 shadow">
+    {% if about.show_header_image %}
+    {% with 'site_pages/about/header_image/'|add:about.header_image_file_name as header_img_static %}
+    <div class="header-image" style="background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.2)), url('{% static header_img_static %}');">
+    {% endwith %}
+        <div class="hero-text-header text-center">
+            <h1 class="text-light textshadow">About</h1>
+            {% if about.header_text != '' %}
+            <h4 class="header-text justify-content-center text-light">
+                {{ about.header_text }}
+            </h4>
+            {% endif %}
+        </div>
+    </div>
+    {% else %}
+    <div class="center-container pad-container">
+        <h1 class="title-container text-center">About</h1>
+        {% if about.header_text != '' %}
+        <h4 class="text-center" style="margin-top: 2%;">
+            {{ about.header_text }}
+        </h4>
+        {% endif %}
+    </div>
+    {% endif %}
+
+    <div class="container-sm">
+        <div class="container p-4">
+            {% if about.box1_content_text != '' and about.box2_content_text != '' %}
+            <div class="row" style="margin-left: 0.5%;">
+                <div class="left-container default-text">
+                    <div class="d-flex justify-content-center" style="margin-bottom: 1%;">
+                        <h2>{{ about.box1_header_text }}</h2>
+                    </div>
+                    <p class="mb-4">
+                        {% if about.box1_img_file_name %}
+                        {% with 'site_pages/about/box1_image/'|add:about.box1_img_file_name as box1_img_static %}
+                        <img class="gallery-img" src="{% static box1_img_static %}"
+                            alt="{{ about.box1_img_alt }}"
+                            style="{{ about.box1_img_size }} {{ about.box1_img_position }} margin: 1%;"><br>
+                        {% endwith %}
+                        {% endif %}
+                        {{ about.box1_content_text | safe | linebreaksbr }}
+                    </p>
+                </div>
+                <div class="right-container default-text">
+                    <div class="d-flex justify-content-center" style="margin-bottom: 1%;">
+                        <h2>{{ about.box2_header_text }}</h2>
+                    </div>
+                    <p class="mb-4">
+                        {% if about.box2_img_file_name %}
+                        {% with 'site_pages/about/box2_image/'|add:about.box2_img_file_name as box2_img_static %}
+                        <img class="gallery-img" src="{% static box2_img_static %}"
+                            alt="{{ about.box2_img_alt }}"
+                            style="{{ about.box2_img_size }} {{ about.box2_img_position }} margin: 1%;"><br>
+                        {% endwith %}
+                        {% endif %}
+                        {{ about.box2_content_text | safe | linebreaksbr }}
+                    </p>
+                </div>
+            </div>
+            {% elif about.box1_content_text != '' %}
+            <div class="content-container border-dotted-brand-green default-text bg-front-neutral">
+                <div class="d-flex justify-content-center">
+                    <h2>{{ about.box1_header_text }}</h2>
+                </div>
+                <p class="mb-3 pb-4">
+                    {% if about.box1_img_file_name %}
+                    {% with 'site_pages/about/box1_image/'|add:about.box1_img_file_name as box1_img_static %}
+                    <img class="gallery-img" src="{% static box1_img_static %}"
+                        alt="{{ about.box1_img_alt }}"
+                        style="{{ about.box1_img_size }} {{ about.box1_img_position }} margin: 1%;"><br>
+                    {% endwith %}
+                    {% endif %}
+                    {{ about.box1_content_text | safe | linebreaksbr }}
+                </p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+{% block body_scripts %}
+<script>
+    $(document).ready(function() {
+        setActiveLink('about');
+    });
+</script>
+{% endblock body_scripts %}

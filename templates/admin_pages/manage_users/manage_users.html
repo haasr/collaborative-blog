@@ -1,0 +1,139 @@
+{% extends "../admin_pages_base.html" %}
+
+{% load static %}
+
+{% block content %}
+
+<div class="d-flex justify-content-center" style="padding: 1%;">
+    <a href="{% url 'admin_pages:admin_index' %}">
+        <button class="btn btn-warning">&#60; Back to Menu</button>
+    </a>
+</div>
+
+<div class="container" style="background-color: #858383; border-radius: 10px;">
+    {% for message in messages %}
+    <div class="alert alert-info">
+        <a class="close" href="#" data-dismiss="alert">×</a>
+           {{ message }}
+    </div>
+    {% endfor %}
+    <h1 class="text-center text-white pt-3">Manage Accounts</h1>
+    <p class="text-center pt-4 pb-4">
+        <a href="{% url 'users:register' %}">
+            <button class="btn btn-primary">Add Account</button>
+        </a>
+    </p>
+    <div class="center-table pad-container hide-when-small shadow" style="background-color: #B3BBC3; border-radius: 5px;">
+        <p class="mb-3 p-2 border-dotted-brand-green text-center fs-400 bg-light">
+            <svg xmlns="http://www.w3.org/2000/svg" width="2.1rem" height="2.1rem" fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
+                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
+            </svg>
+            &nbsp;All user accounts have access to edit the website
+            through this site's <a href="{% url 'two_factor:login' %}">login page</a>.
+            <br>If a user account is no longer associated with this site, it should be
+            deleted.
+        </p>
+        <table class="shadow"
+            style="width: 100%; background-color: #F1F1F1; border-radius: 5px;">
+            <tr>
+                <th>Name</th>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Date Joined</th>
+                <th>Admin</th>
+                <th>Delete</th>
+            </tr>
+        {% for user in users %}
+            <tr>
+                <td>{{ user.first_name }}  {{ user.last_name }}</td>
+                <td>{{ user.username }}</td>
+                <td>{{ user.email }}</td>
+                <td>{{ user.date_joined }}</td>
+                <td>
+                    {% if user.is_superuser %}
+                    <input type="checkbox" checked onclick="toggleAdmin('{{ csrf_token }}', '{{user.first_name}}', {{ user.id }})">
+                    {% else %}
+                    <input type="checkbox" onclick="toggleAdmin('{{ csrf_token }}', '{{user.first_name}}', {{ user.id }})">
+                    {% endif %}
+                </td>
+                <td>
+                    <a href="{% url 'users:confirm_delete_user' user.id %}" 
+                        style="color: red;">
+                        Delete
+                    </a>
+                </td>
+            </tr>
+        {% endfor %}
+        </table>
+    </div>
+</div>
+
+<div class="show-when-small container">
+    <div class="pt-1 pr-3 pb-1 pl-3" style="background-color: #B3BBC3; border-radius: 5px;">
+        <div class="bg-light">
+            <p class="p-2 border-dotted-brand-green text-center fs-400">
+                <svg xmlns="http://www.w3.org/2000/svg" width="2.1rem" height="2.1rem" fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
+                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                    <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
+                </svg>
+                &nbsp;All user accounts have access to edit the website
+                through this site's <a href="{% url 'two_factor:login' %}">login page</a>.
+                <br>If a user account is no longer associated with this site, it should be
+                deleted.
+            </p>
+            {% for user in users %}
+            <div class="collapse-container shadow mb-1">
+                <span class="font-weight-bolder">{{ user.first_name }} {{ user.last_name }}</span>
+                <span class="float-right">
+                    <a class="bg-light p-2" href="{% url 'users:confirm_delete_user' user.id %}"
+                        style="color: red; border-radius: 5px;">
+                        Delete
+                    </a>
+                </span>
+            </div>
+            <div class="expand-content shadow align-items-center">
+                <div class="row ml-2 mr-2">
+                    <div class="col">
+                        <span class="font-weight-bolder">Username:</span>
+                        &ensp;{{ user.username }}
+                    </div>
+                </div>
+                <div class="row ml-2 mr-2">
+                    <div class="col">
+                        <span class="font-weight-bolder">Email:</span>
+                        &emsp;&emsp;&ensp;&nbsp;{{ user.email }}
+                    </div>
+                </div>
+                <div class="row ml-2 mr-2">
+                    <div class="col">
+                        <span class="font-weight-bolder">Admin</span>
+                        &emsp;&emsp;&nbsp;
+                        {% if user.is_superuser %}
+                        <input type="checkbox" checked onclick="toggleAdmin('{{ csrf_token }}', '{{user.first_name}}', {{ user.id }})">
+                        {% else %}
+                        <input type="checkbox" onclick="toggleAdmin('{{ csrf_token }}', '{{user.first_name}}', {{ user.id }})">
+                        {% endif %}
+                    </div>
+                </div>
+                <hr>
+                <span class="space-left-sm">Date joined: {{ user.date_joined }}</span>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+{% block body_scripts %}
+<script src="{% static 'admin_pages/js/collapse-container-toggler.js' %}"></script>
+<script>
+    function toggleAdmin(csrfToken, userName, userID) {
+        $.ajax({
+            url: '/admin_pages/toggle_superuser_status/' + userID,
+            type: 'GET'
+        });
+        alert(`${userName}'s privelege has been updated.`)
+    }
+</script>
+{% endblock body_scripts %}

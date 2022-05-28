@@ -1,0 +1,32 @@
+{% extends "../admin_pages_base.html" %}
+
+{% block content %}
+<div class="d-flex justify-content-center" style="padding: 1%;">
+	<a href="{% url 'admin_pages:admin_index' %}">
+		<button class="btn btn-warning">&#60; Back to Menu</button>
+	</a>
+</div>
+
+{% load crispy_forms_tags %}
+<div class="container-sm flow">
+	<div class="lightly-pad-container shadow text-break border-dotted-brand-green">
+		<div class="text-center title"><h2>Manage Contact Page</h2></div>
+		<div class="form-container">
+			<form method='post' enctype='multipart/form-data'>
+				{% crispy form %}
+				<div class="form-row">
+                    <div class="col-25">
+                        &nbsp;
+                    </div>
+                    <div class="col-25" style="text-align: left;">
+                        <button class="btn btn-primary" type="submit">Save</button>
+                    </div>
+                    <div class="col-25" style="text-align: left;">
+                        <a href="{% url 'admin_pages:admin_index' %}"><button class="btn btn-danger" type="button">Cancel</button></a>
+                    </div>
+                </div>
+			</form>
+		</div>
+	</div>
+</div>
+{% endblock content %}

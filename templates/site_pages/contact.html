@@ -1,0 +1,206 @@
+{% extends "./site_pages_base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block page_title %}Contact{% endblock page_title %}
+
+{% block more_links %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/forms.css' %}">
+{% endblock more_links %}
+
+{% block content %}
+<div class="content-container-md-clear border-brand-green mt-4 mb-4 shadow">
+    {% if contact.show_header_image %}
+    {% with 'site_pages/contact/header_image/'|add:contact.header_image_file_name as header_img_static %}
+    <div class="header-image" style="background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.2)), url('{% static header_img_static %}');">
+    {% endwith %}
+        <div class="hero-text-header text-center">
+            <h1 class="text-light textshadow">Contact</h1>
+            {% if contact.header_text != '' %}
+            <h4 class="header-text justify-content-center text-light">
+                {{ contact.header_text }}
+            </h4>
+            {% endif %}
+        </div>
+    </div>
+    {% else %}
+    <div class="center-container pad-container">
+        <h1 class="title-container text-center">Contact</h1>
+        {% if contact.header_text != '' %}
+        <h4 class="text-center" style="margin-top: 2%;">
+            {{ contact.header_text }}
+        </h4>
+        {% endif %}
+    </div>
+    {% endif %}
+
+    <div style="background-color: rgba(234, 234, 234, 0.7);">
+        {% if contact.show_contact_form  %}
+        <div class="row ml-2 mr-2">
+            <div class="left-container default-text">
+                {% if contact.phone_fax_header_text != '' %}
+                <div style="border-bottom: 1px solid hsl( var(--clr-light) );">
+                    <div class="fs-550 font-weight-bolder text-dark" style="margin-top: 8%; margin-right: 8%; margin-bottom: 6%;">
+                        {{ contact.phone_fax_header_text }}
+                        <hr>
+                    </div>
+
+                    {% if contact.contact_phone != '' %}
+                    <a href="tel:{{ contact.contact_phone }}" target="_blank" class="fa footer-fa fa-phone" alt="Phone icon"><span class="contact-number space-left-sm">{{ contact.contact_phone }}</span></a>
+                    <br>
+                    {% endif %}
+
+                    {% if contact.contact_fax != '' %}
+                    <i class="fa fa-print" alt="Fax icon"><span class="contact-number space-left-sm">{{ contact.contact_fax }}</i>
+                    {% endif %}
+                    <br>
+                </div>
+                {% endif %}
+
+                {% if contact.addr_mail_header_text != '' %}
+                <div style="border-bottom: 1px solid hsl( var(--clr-light) );">
+                    <div class="fs-550 font-weight-bolder text-dark" style="margin-top: 8%; margin-right: 8%; margin-bottom: 6%;">
+                        {{ contact.addr_mail_header_text }}
+                        <hr>
+                    </div>
+
+                    {% if contact.contact_address != '' %}
+                    <h4 class="ml-2" style="margin-bottom: 15px;">{{ contact.contact_address }}</h4>
+                    {% endif %}
+
+                    {% if contact.contact_mailbox != '' %}
+                    <h4 class="ml-2" style="margin-bottom: 15px;">{{ contact.contact_mailbox }}</h4>
+                    {% endif %}
+
+                    {% if contact.contact_email_addr != '' %}
+                    <a href="mailto:{{ contact.contact_email_addr }}" target="_blank" class="fa footer-fa fa-envelope" alt="Email icon"><span class="space-left-sm" style="font-size: 0.8em;">{{ contact.contact_email_addr }}</span></a>
+                    {% endif %}
+                </div>
+                {% endif %}
+            </div>
+
+            <div class="right-container default-text">
+                <div class="row" style="margin: 1rem 0 1rem 0;">
+                    <div class="text-break border-brand-green p-2" style="border-radius: 5px;">
+                        <div class="bg-front-neutral">
+                            <p class="p-2 border-dotted-brand-green text-center fs-450">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="2.1rem" height="2.1rem" fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16"
+                                    style="float: left;">
+                                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                                    <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
+                                </svg>
+                                &nbsp;{{ contact.contact_form_message }}
+                            </p>
+                        </div>
+                        <div class="ml-2 mr-2 form-container" style="background-color: transparent!important;">
+                            {% crispy viewer_contact_form %}
+                            <div class="center text-center mt-2">
+                                <button class="btn btn-outline-secondary" style="padding-left: 10%; padding-right: 10%;"
+                                    onclick="submitContactForm('{{ csrf_token }}');">Submit
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% else %}
+            {% if contact.phone_fax_header_text != '' and contact.addr_mail_header_text != '' %}
+                <div class="row">
+                    <div class="left-container default-text">
+                    {% if contact.phone_fax_header_text != '' %}
+                        <div class="d-flex mb-2 pl-5">
+                            <div class="fs-550 font-weight-bolder text-dark">{{ contact.phone_fax_header_text }}</div>
+                        </div>
+                        <div class="content-container">
+                            {% if contact.contact_phone != '' %}
+                            <a href="tel:{{ contact.contact_phone }}" target="_blank" class="fa footer-fa fa-phone" alt="Phone icon"><span class="space-left-sm" style="font-size: 0.8em;">{{ contact.contact_phone }}</span></a>
+                            <br>
+                            {% endif %}
+
+                            {% if contact.contact_fax != '' %}
+                            <i class="fa fa-print" alt="Fax icon"><span class="space-left-sm" style="font-size: 0.8em;">{{ contact.contact_fax }}</i>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+                    </div>
+                    <div class="right-container default-text" style="border-top: 1px dotted hsl( var(--clr-brand-green) );">
+                    {% if contact.addr_mail_header_text %}
+                        <div class="d-flex mb-2 pl-5">
+                            <div class="fs-550 font-weight-bolder text-dark">
+                                {{ contact.addr_mail_header_text }}
+                            </div>
+                            <hr>
+                        </div>
+                        <div class="content-container">
+                            {% if contact.contact_address != '' %}
+                            <h4 class="ml-2" style="margin-bottom: 15px;">{{ contact.contact_address }}</h4>
+                            {% endif %}
+
+                            {% if contact.contact_mailbox != '' %}
+                            <h4 class="ml-2" style="margin-bottom: 15px;">{{ contact.contact_mailbox }}</h4>
+                            {% endif %}
+
+                            {% if contact.contact_email_addr != '' %}
+                            <a href="mailto:{{ contact.contact_email_addr }}" target="_blank" class="fa footer-fa fa-envelope" alt="Email icon"><span class="space-left-sm" style="font-size: 0.8em;">{{ contact.contact_email_addr }}</span></a>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+                    </div>
+                </div>
+
+            {% else %}
+                {% if contact.phone_fax_header_text != '' %}
+                <div class="d-flex justify-content-center">
+                    <div class="fs-550 font-weight-bolder text-dark mt-2 mb-2">{{ contact.phone_fax_header_text }}</div>
+                    <hr>
+                </div>
+                <div class="d-flex justify-content-center">
+                    <div class="content-container">
+                        {% if contact.contact_phone != '' %}
+                        <a href="tel:{{ contact.contact_phone }}" target="_blank" class="fa footer-fa fa-phone" alt="Phone icon"><span class="space-left-sm" style="font-size: 0.8em;">{{ contact.contact_phone }}</span></a>
+                        <br>
+                        {% endif %}
+
+                        {% if contact.contact_fax != '' %}
+                        <i class="fa fa-print" alt="Fax icon"><span class="space-left-sm" style="font-size: 0.8em;">{{ contact.contact_fax }}</i>
+                        {% endif %}
+                    </div>
+                </div>
+                {% elif contact.addr_mail_header_text != '' %}
+                <div class="d-flex justify-content-center">
+                    <div class="fs-550 font-weight-bolder text-dark mt-2 mb-2">
+                        {{ contact.addr_mail_header_text }}
+                    </div>
+                    <hr>
+                </div>
+                <div class="d-flex justify-content-center">
+                    <div class="content-container">
+                        {% if contact.contact_address != '' %}
+                        <h4 class="ml-2" style="margin-bottom: 15px;">{{ contact.contact_address }}</h4>
+                        {% endif %}
+
+                        {% if contact.contact_mailbox != '' %}
+                        <h4 class="ml-2" style="margin-bottom: 15px;">{{ contact.contact_mailbox }}</h4>
+                        {% endif %}
+
+                        {% if contact.contact_email_addr != '' %}
+                        <a href="mailto:{{ contact.contact_email_addr }}" target="_blank" class="fa footer-fa fa-envelope" alt="Email icon"><span class="space-left-sm" style="font-size: 0.8em;">{{ contact.contact_email_addr }}</span></a>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endif %}
+            {% endif %}
+        {% endif %}
+    </div>
+</div>
+{% endblock content %}
+
+{% block body_scripts %}
+<script>
+    $(document).ready(function() {
+        setActiveLink('contact');
+    });
+</script>
+{% endblock body_scripts %}

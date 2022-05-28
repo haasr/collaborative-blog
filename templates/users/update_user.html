@@ -1,0 +1,41 @@
+
+{% extends './users_base.html' %}
+
+{% block page_title %}Update Account Info{% endblock page_title %}
+
+{% block content %}
+
+<style>
+	ul { list-style: none; }
+	li { color: red; }
+</style>
+
+{% load crispy_forms_tags %}
+<div class="container-sm flow mb-4">
+    <div class="lightly-pad-container shadow text-break">
+        <div class="text-center title"><h2>Update Account Info</h2></div>
+        <div class="form-container">
+            <div class="row mb-3">
+                <div class="col-25">
+                </div>
+                <div class="col-75">
+                    <a href="{% url 'users:reset_password' %}"><button class="btn btn-outline-secondary">Update my password</button></a>
+                    <a href="{% url 'two_factor:profile' %}" class="ml-5"><button class="btn btn-outline-secondary">2FA settings</button></a>
+                </div>
+            </div>
+
+            <form method='post'>
+                {% crispy form %}
+                <div class="form-btn-container">
+                    <div class="d-flex justify-content-center">
+                        <button class="btn btn-primary" style="padding-left: 5%; padding-right: 5%;" type="submit">
+                            Save
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

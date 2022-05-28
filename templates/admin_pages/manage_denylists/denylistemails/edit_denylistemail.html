@@ -1,0 +1,29 @@
+{% extends "../../admin_pages_base.html" %}
+
+{% block content %}
+
+{% load crispy_forms_tags %}
+<div class="container-sm flow">
+	<div class="lightly-pad-container shadow text-break border-dotted-brand-green">
+		<div class="text-center title"><h2>Edit Email Entry</h2></div>
+		<div class="form-container">
+			<form method="post">
+				{% crispy form %}
+				<div class="form-row">
+                    <div class="col-25">
+                        &nbsp;
+                    </div>
+                    <div class="col-25" style="text-align: left;">
+                        <button class="btn btn-primary" type="submit">Save</button>
+                    </div>
+                    <div class="col-25" style="text-align: left;">
+                        <button class="btn btn-danger" onclick="javascript:window.location.replace('/admin_pages');" type="button">Cancel</button>
+                    </div>
+                </div>
+			</form>
+		</div>
+	</div>
+</div>
+<br>
+
+{% endblock content %}

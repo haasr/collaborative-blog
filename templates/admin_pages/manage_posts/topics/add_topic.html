@@ -1,0 +1,43 @@
+{% extends "../../admin_pages_base.html" %}
+
+{% block content %}
+{% load crispy_forms_tags %}
+<br>
+<div class="container-sm flow">
+	<div class="lightly-pad-container shadow text-break text-center border-dotted-brand-green">
+		<div class="text-center title"><h2>Add a New Topic</h2></div>
+		<div class="form-container">
+			<form action="{% url 'admin_pages:add_topic' post_id %}" method='post'>
+				{% crispy form %}
+				<div class="form-row">
+                    <div class="col-25">
+                        &nbsp;
+                    </div>
+                    <div class="col-25" style="text-align: left;">
+                        <button class="btn btn-primary" type="submit">Save</button>
+                    </div>
+                    <div class="col-25" style="text-align: left;">
+                        <a href="{% url 'admin_pages:manage_posts' %}"><button class="btn btn-danger" type="button">Cancel</button></a>
+                    </div>
+                </div>
+			</form>
+		</div>
+	</div>
+</div>
+
+<script>
+$(document).ready(function() {
+	let sel = document.getElementById('id_topic_choice');
+	let input = document.getElementById('id_name');
+	input.value = sel.options[sel.selectedIndex].text;
+
+	sel.addEventListener('change', function() {
+		input.value = sel.options[sel.selectedIndex].text;
+	});
+	
+	input.addEventListener('focus', function() {
+		$(this).selectText();
+	});
+});
+</script>
+{% endblock content %}

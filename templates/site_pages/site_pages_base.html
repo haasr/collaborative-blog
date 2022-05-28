@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+
+{% load static %}
+{% load crispy_forms_tags %}
+<head>
+  <title>{{ meta_title }}: {% block page_title %}{% endblock page_title %}</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="{{ meta_description }}">
+  <meta name="keywords" content="{{ meta_keywords }}">
+  <meta name="author" content="{{ meta_author }}">
+  <meta name="robots" content="{{ robots_index }}, {{ robots_follow }}">
+
+  {{ font|safe }}
+  <link rel="icon" href="{% static 'images/favicon.ico' %}">
+  <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'css/forms.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'css/prism.css' %}">
+  {% block more_links %}{% endblock more_links %}
+  <script
+  src="https://code.jquery.com/jquery-3.5.1.min.js"
+  integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0="
+  crossorigin="anonymous"></script>
+  <script
+  src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+  integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+  crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+  integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
+  crossorigin="anonymous"></script>
+  <style>
+    footer { background-color: {{ footer_color }}; }
+    .featured-toggle :hover {
+      cursor: pointer;
+    }
+    .nav-link { border-radius: 4px; }
+    .nav-link-selected { background-color: #DDDDDD; }
+    {% block more_style %}{% endblock more_style %}
+  </style>
+</head>
+
+<body class="site_pages" style="font-family: '{{ font_family }}', sans-serif;">
+
+<div class="page-container">
+  <div class="content-wrap">
+    <div class="nav-container bg-white shadow" style="border-bottom: 4px solid hsl( var(--clr-brand-green) );">
+      <nav class="navbar navbar-expand-md content-container-md-clear navbar-light static-top bg-white">
+        <a class="navbar-brand" href="{% url 'index' %}" style="border-radius: 5px;">
+          <img src="{% static 'site_pages/site_look/nav_image/nav_image.png' %}"
+            alt="Home" title="Home" style="{{ navigation_img_size }}">
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse"
+          data-target="#navbarResponsive" aria-controls="navbarResponsive"
+          aria-expanded="false", aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+          <ul class="navbar-nav mx-auto">
+            {% if show_home %}
+            <li class="nav-item">
+              <a class="nav-link" id="home" href="{% url 'index' %}">Home</a>
+            </li>
+            {% endif %}
+            {% if show_topics %}
+            <li class="nav-item">
+              <a class="nav-link" id="topics" href="{% url 'topics' %}">Topics</a>
+            </li>
+            {% endif %}
+            {% if show_timeline %}
+            <li class="nav-item">
+              <a class="nav-link" id="timeline" href="{% url 'timeline' %}">Timeline</a>
+            </li>
+            {% endif %}
+            {% if show_about %}
+            <li class="nav-item">
+              <a class="nav-link" id="about" href="{% url 'about' %}">About</a>
+            </li>
+            {% endif %}
+            {% if show_contact %}
+            <li class="nav-item">
+              <a class="nav-link" id="contact" href="{% url 'contact' %}">Contact</a>
+            </li>
+            {% endif %}
+            {% if show_contrib %}
+            <li class="nav-item">
+              <a class="nav-link" id="contrib" href="{% url 'contrib' %}">Contribute</a>
+            </li>
+            {% endif %}
+          </ul>
+        </div>
+      </nav>
+      {% if user.is_authenticated %}
+        <div class="text-center">
+          <a class="text-dark nav-link" href="{% url 'admin_pages:admin_index' %}"
+            style="background-color: #FFD9AB; font-weight: bold;">
+            MANAGE
+          </a>
+        </div>
+        {% endif %}
+    </div>
+
+    <div id="modal" class="modal" style="display: none; margin-top: 100px;">
+      <div class="modal-content">
+          <div class="align-items-right">
+            <button class="btn btn-danger close-modal text-white" id="close-modal">&nbsp;X&nbsp;</button>
+          </div>
+          <div class="row mt-3">
+            <div class="col-md">
+              {% if subscribe_form_settings.box_img_file_name != '' %}
+              {% with 'site_pages/forms/subscriber_form/box_img/'|add:subscribe_form_settings.box_img_file_name as box_img_static %}
+              <div class="row header-image-sm center" style="background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.2)), url('{% static box_img_static %}');">
+                <div class="hero-text-header text-center">
+                  <div class="fs-650 text-light textshadow">{{ subscribe_form_settings.title }}</div>
+                </div>
+              {% endwith %}
+              {% else %}
+              <div class="row">
+                <div class="col-25"></div>
+                <div class="col-75 fs-650">{{ subscribe_form_settings.title }}</div>
+              {% endif %}
+              </div>
+              <p class="mt-3 content-container-sm-clear fs-450">{{ subscribe_form_settings.message }}</p>
+              <div class="form-container">
+                {% crispy subscribe_form %}
+                <div class="row mt-3">
+                  <div class="col-25"></div>
+                  <div class="col-75">
+                    <button class="btn btn-outline-secondary"
+                      onclick="submitSubscribeForm('{{ csrf_token }}')">Submit</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+      </div>
+    </div>
+
+    {% if subscribe_form_settings.show_form %}
+    <div class="center hide-when-small pt-2 pb-2 pl-3 align-items-center"
+      style="position: fixed; border-radius: 5px; width: 132px; z-index: 1; background-color: transparent; bottom: 1px; right: 5px;">
+      <button class="btn bttn-brand-green text-center shadow" onclick="openModal()" style="border: 1px solid white;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="1.5rem" height="1.5rem" fill="currentColor" class="bi bi-box-arrow-up-left" viewBox="0 0 16 16">
+          <path fill-rule="evenodd" d="M7.364 3.5a.5.5 0 0 1 .5-.5H14.5A1.5 1.5 0 0 1 16 4.5v10a1.5 1.5 0 0 1-1.5 1.5h-10A1.5 1.5 0 0 1 3 14.5V7.864a.5.5 0 1 1 1 0V14.5a.5.5 0 0 0 .5.5h10a.5.5 0 0 0 .5-.5v-10a.5.5 0 0 0-.5-.5H7.864a.5.5 0 0 1-.5-.5z"/>
+          <path fill-rule="evenodd" d="M0 .5A.5.5 0 0 1 .5 0h5a.5.5 0 0 1 0 1H1.707l8.147 8.146a.5.5 0 0 1-.708.708L1 1.707V5.5a.5.5 0 0 1-1 0v-5z"/>
+        </svg>
+        Subscribe
+      </button>
+    </div>
+    {% endif %}
+
+    {% block content %}{% endblock content %}
+  </div>
+</div>
+
+{% if footer_text_color == 'text-light' %}
+<footer class="shadow {{ footer_text_color }}" id="footer" style="background-color: {{ footer_color }};">
+  <div class="row mb-2">
+    {% if footer_tagline != '' %}
+    <div class="col-md mb-2 pt-2">
+      <h4>{{ footer_tagline }}</h4>
+      <p class="pt-2 text-accent">
+        {{ footer_about|safe }}
+      </p>
+    </div>
+    {% endif %}
+    {% if footer_location != '' %}
+    {% if footer_tagline != '' %}
+    <div class="col-md footer-top-left-border-light mb-2 pt-2">
+    {% else %}
+    <div class="col-md mb-2 pt-2">
+    {% endif %}
+      <h4>Location</h4>
+      <p class="text-accent pt-2">
+        {% if footer_lat and footer_lon %}
+        <iframe allowtransparency="true" frameborder="0" scrolling="no"
+          style="width: 100%; height: 150px; margin-top: 10px; margin-bottom: 10px;"
+          src="//www.weebly.com/weebly/apps/generateMap.php?map=google&elementid=814774045449018965&ineditor=0&control=3&width=auto&height=150px&overviewmap=0&scalecontrol=0&typecontrol=0&zoom=15&long={{ footer_lon }}&lat={{ footer_lat }}&domain=www&point=1&align=1&reseller=false">
+        </iframe>
+        {% endif %}
+        {{ footer_location }}
+      </p>
+    </div>
+    {% endif %}
+
+    {% if footer_contact_email != '' or footer_contact_phone != '' or email_contact_form_settings.show_form %}
+    {% if footer_tagline != '' or footer_location != '' %}
+    <div class="col-md footer-top-left-border-light mb-2 pt-2">
+    {% else %}
+    <div class="col-md mb-2 pt-2">
+    {% endif %}
+      <h4>Contact</h4>
+
+      {% if footer_contact_email != '' %}
+      <a href="mailto:{{ footer_contact_email }}" target="_blank"class="{{ footer_text_color }} fa footer-fa fa-envelope"
+        alt="Email link icon" style="white-space: nowrap;">
+        <span class="space-left-sm" style="font-size: 20px;">{{ footer_contact_email}}</span>
+      </a>
+      {% endif %}
+
+      {% if footer_contact_phone != '' %}
+      <a href="tel:{{ footer_contact_phone }}" target="_blank" class="{{ footer_text_color }} fa footer-fa fa-phone"
+        alt="Phone number link icon" style="white-space: nowrap;">
+        <span class="space-left-sm" style="font-size: 20px;">{{ footer_contact_phone }}</span>
+      </a>
+      {% endif %}
+
+      {% if email_contact_form_settings.show_form %}
+      <h5 style="font-weight: bold; padding-top: 5%;">{{ email_contact_form_settings.message }}</h5>
+      <div class="mt-3">
+        {{ email_contact_form }}
+        <button class="btn btn-outline-light" style="margin-left: 3%;"
+          onclick="submitEmailForm('{{ csrf_token }}')">Submit</button>
+      </div>
+      {% endif %}
+    </div>
+    {% endif %}
+  </div>
+
+  {% if footer_copyright != '' %}
+  <div class="row">
+    <div class="col fs-400">
+      <a href="{% url 'two_factor:login' %}" class="{{ footer_text_color }}" style="text-decoration: none;"> &copy;</a>
+        &nbsp;{{ footer_copyright }}
+    </div>
+  </div>
+  {% endif %}
+</footer>
+
+{% else %}
+<footer class="shadow" id="footer" style="background-color: {{ footer_color }};">
+  <div class="row mb-2">
+    {% if footer_tagline != '' %}
+    <div class="col-md mb-2 pt-2">
+      <h4>{{ footer_tagline }}</h4>
+      <p class="{{ footer_text_color }} pt-2">
+        {{ footer_about|safe }}
+      </p>
+    </div>
+    {% endif %}
+
+    {% if footer_location != '' %}
+    {% if footer_tagline != '' %}
+    <div class="col-md footer-top-left-border-dark mb-2 pt-2">
+    {% else %}
+    <div class="col-md mb-2 pt-2">
+    {% endif %}
+      <h4>Location</h4>
+      <p class="{{ footer_text_color }} pt-2">
+        {% if footer_lat and footer_lon %}
+        <iframe allowtransparency="true" frameborder="0" scrolling="no"
+          style="width: 100%; height: 150px; margin-top: 10px; margin-bottom: 10px;"
+          src="//www.weebly.com/weebly/apps/generateMap.php?map=google&elementid=814774045449018965&ineditor=0&control=3&width=auto&height=150px&overviewmap=0&scalecontrol=0&typecontrol=0&zoom=15&long={{ footer_lon }}&lat={{ footer_lat }}&domain=www&point=1&align=1&reseller=false">
+        </iframe>
+        {% endif %}
+        {{ footer_location }}
+      </p>
+    </div>
+    {% endif %}
+
+    {% if footer_contact_email != '' or footer_contact_phone != '' or email_contact_form_settings.show_form %}
+    {% if footer_tagline != '' or footer_location != '' %}
+    <div class="col-md footer-top-left-border-dark mb-2 pt-2">
+    {% else %}
+    <div class="col-md mb-2 pt-2">
+    {% endif %}
+      <h4>Contact</h4>
+
+      {% if footer_contact_email != '' %}
+      <a href="mailto:{{ footer_contact_email }}" target="_blank"class="{{ footer_text_color }} fa footer-fa fa-envelope"
+        alt="Email link icon" style="white-space: nowrap;">
+        <span class="space-left-sm" style="font-size: 20px;">{{ footer_contact_email}}</span>
+      </a>
+      {% endif %}
+
+      {% if footer_contact_phone != '' %}
+      <a href="tel:{{ footer_contact_phone }}" target="_blank" class="{{ footer_text_color }} fa footer-fa fa-phone"
+        alt="Phone number link icon" style="white-space: nowrap;">
+        <span class="space-left-sm" style="font-size: 20px;">{{ footer_contact_phone }}</span>
+      </a>
+      {% endif %}
+
+      {% if email_contact_settings.show_form %}
+      <h5 style="font-weight: bold; padding-top: 5%;">{{ email_contact_form_settings.message }}</h5>
+      <div class="mt-3">
+        {{ email_contact_form }}
+        <button class="btn btn-outline-secondary" style="margin-left: 3%;"
+          onclick="submitEmailForm('{{ csrf_token }}')">Submit</button>
+      </div>
+      {% endif %}
+    </div>
+    {% endif %}
+  </div>
+
+  {% if footer_copyright != '' %}
+  <div class="row">
+    <div class="col fs-400">
+      <a href="{% url 'two_factor:login' %}" class="{{ footer_text_color }}" style="text-decoration: none;"> &copy;</a>
+        &nbsp;{{ footer_copyright }}
+    </div>
+  </div>
+  {% endif %}
+</footer>
+{% endif %}
+
+<script src="{% static 'site_pages/js/submit-forms.js' %}"></script>
+
+<script>
+  let modal = document.getElementById('modal');
+  let closeModal = document.getElementById('close-modal');
+
+  closeModal.onclick = function() {
+    modal.style.display = 'none';
+  }
+
+  function openModal() {
+    modal.style.display = 'block';
+  }
+
+  function setActiveLink(page) {
+    document.getElementById(page).classList.add('nav-link-selected');
+  }
+</script>
+
+{% if subscribe_form_settings.show_form and show_subscribe_form %}
+<script>
+  openModal();
+</script>
+{% endif %}
+
+{% block body_scripts %}{% endblock body_scripts %}
+</body>

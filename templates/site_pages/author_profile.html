@@ -1,0 +1,99 @@
+{% extends "./site_pages_base.html" %}
+{% load static %}
+{% load texttransform %}
+
+{% block page_title %}{{ profile.preferred_name }}{% endblock page_title %}
+
+{% block content %}
+
+<div class="feautured-container mt-4 mb-4">
+    <div class="container mb-4" style="max-width: 1000px;">
+        <div class="content-container container-color-neutral shadow">
+            <h1 style="text-align: center;">{{ profile.preferred_name }}</h1>
+        </div>
+        <div class="content-container container-color-neutral" style="padding-top: 1%;">
+            <div class="row">
+                <div class="col-xs" style="margin-left: 3%;">
+                    {% if profile.profile_icon_file_name == '' %}
+                    <img src="{% static 'images/author-profile.png' %}"
+                        alt="{{ profile.preferred_name }}'s Profile Image"
+                        style="width: 128px; height: 128px; object-fit: cover; border-radius: 5px;">
+                    {% else %}
+                    {% with 'site_pages/authors/profile_images/'|add:profile.profile_icon_file_name as profile_img_static %}
+                    <img src="{% static profile_img_static %}"
+                        alt="{{ profile.preferred_name }}'s Profile Image"
+                        style="width: 128px; height: 128px; object-fit: cover; border-radius: 5px;">
+                    {% endwith %}
+                    {% endif %}
+                </div>
+                <div class="col-md" style="line-height: 1.4em;">
+                    {{ profile.bio|safe|linebreaksbr }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container" style="max-width: 1000px;">
+        <div class="content-container container-color-neutral shadow">
+            <h2 style="text-align: center;">Recent Posts</h2>
+        </div>
+        {% for post in posts %}
+        <div class="content-container container-color-neutral" style="padding-top: 1%;">
+            <div class="row" style="padding: 2%;">
+                <div class="col-md" style="border-radius: 5px;">
+                    <h3 class="text-center">
+                        {{ post.title }}
+                    </h3>
+                    <p class="text-center">
+                        <span class="highlight text-center">
+                            {{ post.author.preferred_name }}
+                        </span>
+                        <span>&nbsp; • &nbsp;</span>
+                        <span class="highlight">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" class="bi bi-watch" viewBox="0 0 16 16">
+                                <path d="M8.5 5a.5.5 0 0 0-1 0v2.5H6a.5.5 0 0 0 0 1h2a.5.5 0 0 0 .5-.5V5z"/>
+                                <path d="M5.667 16C4.747 16 4 15.254 4 14.333v-1.86A5.985 5.985 0 0 1 2 8c0-1.777.772-3.374 2-4.472V1.667C4 .747 4.746 0 5.667 0h4.666C11.253 0 12 .746 12 1.667v1.86a5.99 5.99 0 0 1 1.918 3.48.502.502 0 0 1 .582.493v1a.5.5 0 0 1-.582.493A5.99 5.99 0 0 1 12 12.473v1.86c0 .92-.746 1.667-1.667 1.667H5.667zM13 8A5 5 0 1 0 3 8a5 5 0 0 0 10 0z"/>
+                            </svg>
+                            {{ post.date }}
+                        </span>
+                        {% if post.location != '' %}
+                        <br>
+                        <span class="highlight">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" class="bi bi-geo-alt-fill" viewBox="0 0 16 16">
+                                <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/>
+                            </svg>
+                            {{ post.location }}
+                        </span>
+                        {% endif %}
+                    </p>
+                    <hr>
+                    <div class="d-flex justify-content-center">
+                        {% if post.box_img_file_name == '' %}
+                        <img class="shadow" src="{% static 'images/null-image.png' %}" alt="Filler Image"
+                            style="width: 70%; height: 200px; object-fit: cover;">
+                        {% else %}
+                        {% with 'site_pages/posts/images/'|add:post.box_img_file_name as post_img_static %}
+                        <img class="shadow" src="{% static post_img_static %}" alt="{{ post.box_img_alt }}"
+                            style="width: 70%; height: 200px; object-fit: cover; border-radius: 3px;">
+                        {% endwith %}
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="col-lg" style="line-height: 1.4em; border-radius: 5px; border-left: 1px solid rgba(0, 0, 0, 0.2);">
+                    <div>
+                        {{ post.box_content_text|truncatechars:600|remove_headers|safe|linebreaksbr }}
+                    </div>
+                    <div class="d-flex justify-content-center" style="margin-top: 1rem;">
+                        <a href="{% url 'post' post.slug %}">
+                            <button class="btn bttn-outline-brand-green shadow-sm">
+                                Read More
+                            </button>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock content %}
