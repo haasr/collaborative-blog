@@ -3,6 +3,7 @@ collaborative-blog
 *******************
 
 Collaborative Django blog app with built-in CMS.
+Example site: https://ryansreflections.herokuapp.com/
 
 .. image:: ./readme_images/showcase-1-home.png
 
