@@ -759,13 +759,13 @@ Once in your shell enter the following line:
 Follow the prompts to complete initial setup. The username and password you
 generate will be what you use to log into the blog app from the login page.
 
-After the setup script has been run, you will have to exit the shell using `exit()`.
+After the setup script has been run, you will have to exit the shell using ``exit()``.
 
 
 Running the server, Logging in
 ------------------------------
 
-1. The server can be started by entering `python manage.py runserver` from the root project
+1. The server can be started by entering ``python manage.py runserver`` from the root project
 folder.
 
 2. Visit the URL (http://127.0.0.1:8000). To login, scroll down to the footer and click the
