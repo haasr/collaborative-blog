@@ -1287,7 +1287,6 @@ def resend_form_email(request):
             to = request.POST['to']
             form_name = request.POST['form_name']
 
-            success = 1
             success = form_sender.resend_form_email(form_data, to, form_name)
             if success == 1:
                 failure = FormSendFailure.objects.get(id=int(request.POST['form_id']))
