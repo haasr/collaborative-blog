@@ -1,12 +1,10 @@
-from asyncore import write
-from re import sub
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.cron import CronTrigger
 from datetime import datetime as dt, timedelta
 import tzlocal
 
 from django.contrib.sites.models import Site
-from django.core.mail import send_mail, EmailMessage
+from django.core.mail import EmailMessage
 from admin_pages.models import NewsletterSendFailure, Post, SEO, SubscriberNewsletter, SubscribeFormSettings
 from .models import EmailSubscriber
 from custom_template_tags.texttransform.templatetags import texttransform

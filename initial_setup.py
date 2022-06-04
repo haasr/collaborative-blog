@@ -1,8 +1,6 @@
 from admin_pages.models import *
 from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
-from blog import settings
-import os
 
 DEFAULT_FONT = """<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@500&display=swap" rel="stylesheet">&&Barlow"""
 
@@ -23,7 +21,7 @@ x = SiteLook(
 x.save()
 
 x = Home(
-    id=1, 
+    id=1,
     alert_banner='',
     tagline="\"We are just temporary bubbles in the foamy head of the universe's beer.\" - G",
     tagline_shadow=True,

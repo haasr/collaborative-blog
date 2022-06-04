@@ -1,4 +1,3 @@
-from random import choices
 from django import forms
 from admin_pages import models_options
 
@@ -32,11 +31,6 @@ class SiteLookForm(forms.ModelForm):
 
     show_contrib = forms.BooleanField(
         label='Show Contrib Page',
-        required=False,
-    )
-
-    show_donate = forms.BooleanField(
-        label='Show Donate Page',
         required=False,
     )
 
@@ -158,9 +152,8 @@ class SiteLookForm(forms.ModelForm):
         model = SiteLook
         fields = [
             'show_home', 'show_topics', 'show_timeline', 'show_contact',
-            'show_contrib', 'show_donate', 'show_about',
-            'navigation_img', 'navigation_img_size', 'favicon', 'font',
-            'font_preview', 'footer_text_color', 'footer_color',
+            'show_contrib', 'show_about', 'navigation_img', 'navigation_img_size',
+            'favicon', 'font', 'font_preview', 'footer_text_color', 'footer_color',
             'footer_copyright', 'footer_tagline', 'footer_about',
             'footer_contact_phone', 'footer_contact_email', 'footer_location',
             'lat', 'lon'
