@@ -58,13 +58,16 @@ p {
     font-weight: 400;
 }
 
+ul.list li {
+    margin-top: 10px;
+}
+
 body {
     margin: 0;
     padding: 0;
     color: hsl(var( --clr-dark ));
     line-height: 2rem;
     min-height: 100vh;
-    scroll-behavior: smooth!important;
     font-weight: 400;
 }
 

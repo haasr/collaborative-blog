@@ -115,13 +115,14 @@
               {% with 'site_pages/forms/subscriber_form/box_img/'|add:subscribe_form_settings.box_img_file_name as box_img_static %}
               <div class="row header-image-sm center" style="background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.2)), url('{% static box_img_static %}');">
                 <div class="hero-text-header text-center">
-                  <div class="fs-650 text-light textshadow">{{ subscribe_form_settings.title }}</div>
+                  <div class="fs-650 text-light text-center textshadow">{{ subscribe_form_settings.title }}</div>
                 </div>
               {% endwith %}
               {% else %}
               <div class="row">
-                <div class="col-25"></div>
-                <div class="col-75 fs-650">{{ subscribe_form_settings.title }}</div>
+                <div class="col text-center">
+                  <h3 class="fs-650">{{ subscribe_form_settings.title }}</h3>
+                </div>
               {% endif %}
               </div>
               <p class="mt-3 content-container-sm-clear fs-450">{{ subscribe_form_settings.message }}</p>
