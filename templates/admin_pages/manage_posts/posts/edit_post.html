@@ -30,10 +30,15 @@
 <script>
 	tinymce.init({
 		selector: 'textarea',
-		plugins: 'codesample',
+		plugins: [
+			'autolink','codesample', 'lists','link','image','charmap','preview',
+			'anchor','searchreplace','visualblocks', 'fullscreen','insertdatetime',
+			'media','table','help','wordcount'
+		],
 		content_style: "body { line-height: 1; }",
-		codesample_dialog_width: '400',
+		codesample_dialog_width: '400',	
 		codesample_dialog_height: '400',
+		use_native_selects: true,
 		codesample_languages: [
 		{ text: 'HTML/XML', value: 'markup' },
 		{ text: 'PowerShell', value: '' },
@@ -47,7 +52,9 @@
 		{ text: 'C#', value: 'csharp' },
 		{ text: 'C++', value: 'cpp' }
 	],
-  		toolbar: 'undo redo | styleselect | codesample | bold italic | alignleft aligncenter alignright alignjustify | outdent indent'
+	toolbar: 'undo redo | formatpainter casechange blocks | codesample | bold italic backcolor | ' +
+				'alignleft aligncenter alignright alignjustify | ' +
+				'bullist numlist checklist outdent indent | removeformat | a11ycheck code table help'
 	});
 </script>
 {% endblock body_scripts %}

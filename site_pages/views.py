@@ -131,9 +131,7 @@ def post(request, post_slug, goto_section=''):
         response = render(request, 'site_pages/post.html', context)
         response.set_cookie('subscribe_form_shown', True)
 
-        return response
-
-    if post.visibility == 'private':
+    elif post.visibility == 'private':
         if user.is_authenticated and (user.id == post.author.user.id):
             response = render(request, 'site_pages/post.html', context)
         else:
@@ -164,7 +162,7 @@ def post(request, post_slug, goto_section=''):
     else:
         response =  HttpResponseRedirect(reverse('index'))
 
-        return response
+    return response
 
 
 def post_comment_new_thread(request, post_slug):
@@ -442,12 +440,16 @@ def timeline(request):
     if sitelook.show_timeline:
         years_qset = Post.objects.filter(visibility='public').dates('og_date', 'year')
         years = [ ]
-        for i, date in enumerate(years_qset): # Limits to two years per dimension (row)
-            if (i+1)%2 != 0:
-                row = [ date.year ]
-            else:
-                row.append(date.year)
-                years.append(row)
+        if len(years_qset) > 1:
+            for i, date in enumerate(years_qset): # Limits to two years per dimension (row)
+                if (i+1)%2 != 0:
+                    row = [ date.year ]
+                else:
+                    row.append(date.year)
+                    years.append(row)
+        else: # If 1 year.
+            row = [ years_qset[0].year ]
+            years.append(row)
 
         context = {
             'months': MONTHS,
