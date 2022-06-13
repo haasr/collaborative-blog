@@ -35,7 +35,9 @@
             <div class="row" style="margin-left: 0.5%;">
                 <div class="left-container default-text">
                     <div class="d-flex justify-content-center" style="margin-bottom: 1%;">
+                        {% if about.box1_header_text %}
                         <h2>{{ about.box1_header_text }}</h2>
+                        {% endif %}
                     </div>
                     <p class="mb-4">
                         {% if about.box1_img_file_name %}
@@ -50,7 +52,9 @@
                 </div>
                 <div class="right-container default-text">
                     <div class="d-flex justify-content-center" style="margin-bottom: 1%;">
+                        {% if about.box2_header_text %}
                         <h2>{{ about.box2_header_text }}</h2>
+                        {% endif %}
                     </div>
                     <p class="mb-4">
                         {% if about.box2_img_file_name %}
@@ -67,7 +71,9 @@
             {% elif about.box1_content_text != '' %}
             <div class="content-container border-dotted-brand-green default-text bg-front-neutral">
                 <div class="d-flex justify-content-center">
+                    {% if about.box1_header_text %}
                     <h2>{{ about.box1_header_text }}</h2>
+                    {% endif %}
                 </div>
                 <p class="mb-3 pb-4">
                     {% if about.box1_img_file_name %}

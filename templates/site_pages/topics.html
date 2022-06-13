@@ -67,7 +67,8 @@
             <div class="lightly-pad-container bg-front-neutral border-dotted-brand-green">
                 <div class="d-flex">
                     <span class="title">A-Z&ensp;</span>
-                    <input type="text" class="search" placeholder="Search topic" style="width: 176px;">
+                    <label class="sr-only" for="topics-search">Search topic by name</label>
+                    <input id="topics-search" type="text" class="search" placeholder="Search topic" style="width: 176px;">
                 </div>
                 <ul class="list" style="margin-top: 6px; list-style: none;">
                     {% for topic in topics %}

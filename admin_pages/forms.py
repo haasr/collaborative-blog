@@ -10,8 +10,9 @@ from .models_options import NewsletterOptions
 
 class SiteLookForm(forms.ModelForm):
     show_home = forms.BooleanField(
-        label='Shome Home Page in Nav',
+        label='Shome Home in Nav',
         required=False,
+        help_text="All other pages can be hidden. The 'Home' link can be hidden but the Home page is always accessible when the site is live."
     )
 
     show_topics = forms.BooleanField(
@@ -44,12 +45,14 @@ class SiteLookForm(forms.ModelForm):
         required=False,
         widget=forms.TextInput(attrs={
             'placeholder': 'E.g., 2022 - Ryan Haas, All rights reserved.'
-        })
+        }),
+        help_text='A copyright character is automatically inserted in front. The copyright character links to your login.'
     )
 
     footer_tagline = forms.CharField(
         label='Short tagline (40 char. max)',
         required=False,
+        help_text='This tagline appears in the footer.'
     )
 
     footer_about = forms.CharField(
@@ -59,7 +62,8 @@ class SiteLookForm(forms.ModelForm):
             'rows': '3',
             'cols': '40',
             'placeholder': 'Enter a short about statement'
-        })
+        }),
+        help_text='This about statement appears in the footer.'
     )
 
     footer_location = forms.CharField(
@@ -67,7 +71,8 @@ class SiteLookForm(forms.ModelForm):
         required=False,
         widget=forms.TextInput(attrs={
             'placeholder': 'E.g., 123 Mulberry Ln City, ST 12345'
-        })
+        }),
+        help_text='This location is listed in the footer.'
     )
 
     lat = forms.CharField(
@@ -75,7 +80,8 @@ class SiteLookForm(forms.ModelForm):
         required=False,
         widget=forms.TextInput(attrs={
             'placeholder': 'E.g., 35.956332'
-        })
+        }),
+        help_text='A small map of the location is generated in the footer using latitude and longitude.'
     )
 
     lon = forms.CharField(
@@ -83,12 +89,14 @@ class SiteLookForm(forms.ModelForm):
         required=False,
         widget=forms.TextInput(attrs={
             'placeholder': 'E.g., -83.923854'
-        })
+        }),
+        help_text='A small map of the location is generated in the footer using latitude and longitude.'
     )
 
     footer_contact_phone = forms.CharField(
         label='Contact Phone Number',
         required=False,
+        help_text='This phone number appears in the footer.'
     )
 
     footer_contact_email = forms.EmailField(
@@ -96,7 +104,8 @@ class SiteLookForm(forms.ModelForm):
         required=False,
         widget=forms.EmailInput(attrs={
             'placeholder': 'ContactEmail@example.com'
-        })
+        }),
+        help_text='This email address appears in the footer.'
     )
 
     footer_text_color = forms.CharField(
@@ -113,7 +122,8 @@ class SiteLookForm(forms.ModelForm):
         widget=forms.FileInput(attrs={
             'multiple': False,
             'accept': 'image/*'
-        })
+        }),
+        help_text='The image (e.g., logo) that appears in the navigation.'
     )
 
     navigation_img_size = forms.CharField(
@@ -130,7 +140,8 @@ class SiteLookForm(forms.ModelForm):
         widget=forms.FileInput(attrs={
             'multiple': False,
             'accept': 'image/x-icon'
-        })
+        }),
+        help_text='The icon that apears on the browser tab (must have .ico extension).'
     )
 
     font = forms.CharField(
