@@ -6,12 +6,24 @@ Collaborative Django blog app with built-in CMS.
 Example site: https://ryansreflections.herokuapp.com/
 
 .. image:: ./readme_images/showcase-1-home.png
+    :width: 800
+    :alt: Showcase home page in desktop and mobile views
+
 
 .. image:: ./readme_images/showcase-2-topics-timeline.png
+    :width: 800
+    :alt: Showcase Topics and Timeline pages
+
 
 .. image:: ./readme_images/showcase-3-posts.png
+    :width: 800
+    :alt: Showcase Posts pages
+
 
 .. image:: ./readme_images/showcase-4-admin.png
+    :width: 800
+    :alt: Showcase site administration menu and Mail Send Failures page
+
 
 This app emerged from a rough version which hosted my original blog. It is now
 much more fully featured, offering configurability of each of the public site
@@ -483,11 +495,14 @@ to host the database, but it is what I will use in this example.
 2. After you are signed in, create a new app. Name it whatever you'd like.
 
 .. image:: ./readme_images/heroku-1-create-app.png
+    :alt: Heroku app creation screen with app name entered.
 
 
 3. Click the **Resources** tab and search "postgres" in the Add-ons search bar.
 
 .. image:: ./readme_images/heroku-2-search-resources.png
+    :alt: Resources search bar with term postgres entered
+
 
 4. Select **Heroku Postgres** and choose your tier. I'm using the Hobby-Dev one.
 
@@ -496,6 +511,8 @@ to host the database, but it is what I will use in this example.
 6. In the new tab, click **Settings**. And then click **View Credentials...**
 
 .. image:: ./readme_images/heroku-3-view-credentials.png
+    :width: 800
+    :alt: Settings screen with View Credentials button underlined
 
 
 Configure the project to use the Postgres database
@@ -530,6 +547,9 @@ Register a TinyMCE account at ( https://www.tiny.cloud/ ). Once you have finishe
 registering, click **Dashboard**.
 
 .. image:: ./readme_images/tinymce-1-dashboard.png
+    :width: 600
+    :alt: TinyMCE page with Dashboard link underlined in menu
+
 
 1. On the dashboard, scroll down and copy the script. It will look like this:
 
@@ -564,16 +584,24 @@ Creation
 you don't have an account (unless this has changed from the time of writing, in which case, Google it).
 
 .. image:: ./readme_images/aws-1-create-acct.png
+    :width: 800
+    :alt: AWS Console website with create account button underlined
 
 
 2. From the AWS Console screen ( https://aws.amazon.com/console/ ), drop down the **All Services**
 menu and look for S3 under storage. Click it.
 
-.. image:: ./readme_images/aws-2-click-s3.pricing
+.. image:: ./readme_images/aws-2-click-s3.png
+    :width: 800
+    :alt: AWS Console All Services menu with S3 underlined under Storage
+
 
 3. Select **Create Bucket**.
 
 .. image:: ./readme_images/aws-3-create-bucket.png
+    :width: 500
+    :alt: Buckets screen with Create bucket buttons
+
 
 4. Name the bucket. I am leaving all the other settings as the default. If you know what you're
 doing, change them accordingly. Then click **Create bucket**.
@@ -586,6 +614,9 @@ Permissions
 1. If you aren't looking at the **Buckets** screen, navigate to **Amazon S3 > Buckets**.
 
 .. image:: ./readme_images/aws-4-s3-buckets-page.png
+    :width: 800
+    :alt: Amazon S3/Buckets screen
+
 
 2. Click your bucket's name under Name and then click the Permissions tab. Scroll to the very
 bottom until you see the Cross-origin resource Sharing (CORS) section.
@@ -621,18 +652,24 @@ re-enter the URL: https://aws.amazon.com/console/
 the IAM dashboard, click Users in the Access Management menu on the left:
 
 .. image:: ./readme_images/aws-5-iam-access-mgmt.png
+    :width: 700
+    :alt: Identity and Access Management menu with Users option underlined.
 
 
 4. Click **Add Users** and we are going to create a new user, giving them a key for
 programmatic access:
 
 .. image:: ./readme_images/aws-6-iam-add-users.png
+    :width: 800
+    :alt: Add User screen with user details and AWS access type options.
 
 
 5. Next, under **Set Permissions**, choose **Attach existing policies directly**. Then type
 "amazons3" in the search bar to filter the options and tick **AmazonS3FullAccess**.
 
 .. image:: ./readme_images/aws-7-iam-policies.png
+    :width: 800
+    :alt: Filter policies view with AmazonS3FullAccess policy selected.
 
 
 6.  Click **Next**. Skip the tags screen and then click **Create user**.
@@ -641,6 +678,9 @@ programmatic access:
 7. Download the CSV file containing your credentials.
 
 .. image:: ./readme_images/aws-8-iam-download-csv.png
+    :width: 600
+    :alt: Success screen with downloadable CSV file of newly created credentials.
+
 
 Configure the project to use your S3 bucket
 *******************************************
@@ -670,6 +710,7 @@ S3 bucket. To do that we will need to install the Python package, ``awscli``:
 
     cd S3
     aws s3 cp . s3://example-bucket/ --recursive
+    :alt: 
 
 
 Just be sure to replace `example-bucket` with the name of your S3 bucket.
@@ -773,12 +814,17 @@ copyright symbol which links to your staff login page (<site_url>/account/login)
 admin username and password.
 
 .. image:: ./readme_images/localserver-1-footer-login-link.png
+    :width: 500
+    :alt: Zoomed in view of footer copyright.
+
 
 3. After you have entered your username and password (correctly), you will be asked to configure
 two-factor authentication. I recommend using the Google Authenticator app. Follow the prompts; the
 process is straightforward. Pause on the page with the header **2FA Setup Complete**.
 
 .. image:: ./readme_images/localserver-2-2fa-complete.png
+    :width: 700
+    :alt: 2FA setup complete view
 
 
 4. On the **2FA Setup Complete** screen, click **Account Security Options** > **Show Tokens** > **Generate Tokens**.
@@ -789,6 +835,8 @@ over getting locked out and having to go in through the command line to either r
 create a new admin account.
 
 .. image:: ./readme_images/localserver-3-2fa-backup-tokens.png
+    :width: 700
+    :alt: 2FA Backup Tokens view
 
 
 Configure Your Email Recipient and Email Templates
@@ -800,10 +848,15 @@ Email Recipient
 1. From the administrative menu, click on **Email** under **Accounts**.
 
 .. image:: ./readme_images/localserver-4-accounts-email.png
+    :width: 500
+    :alt: Administrative menu with Email option visible
+
 
 2. Enter the email address to which form data will be sent.
 
 .. image:: ./readme_images/localserver-5-recip-email.png
+    :width: 700
+    :alt: Edit recipient email address screen
 
 
 Email Templates
@@ -820,12 +873,18 @@ a form failure will be stored in the administrative page **Failures > Mail Send 
 will say "Invalid template id":
 
 .. image:: ./readme_images/localserver-6-form-exception.png
+    :width: 400
+    :alt: View of logged form exception
+
 
 If I look in my Sendinblue Templates, I can see that there is no form with an ID of 0 (the default my app set) and
 that the correct ID, in my case, would be the template with an ID of 1 as you can see below (that is the template
 I have created to send the Contrib form data):
 
 .. image:: ./readme_images/localserver-7-email-template-ids.png
+    :width: 800
+    :alt: Sendinblue templates page
+
 
 That template ID can be set from the admin menu from **Forms** > **Contrib Form**. But that requires you to have
 email templates set up! Let's get started on setting those up.
@@ -841,6 +900,9 @@ https://my.sendinblue.com/template/kT_c4V82kD8zfJ2N6KR6jrew_aaWbgcpM.6w1HOLuABt5
 
 
 .. image:: ./readme_images/sendinblue-2-import-template.png
+    :width: 800
+    :alt: Sendinblue template Import screen
+
 
 1. You will probably be brought to an editor screen. and this is where you would want to change out my header
 image with a header image of your own (or just delete the image for now). Notice that some of the text is highlighted.
@@ -851,6 +913,9 @@ format does not matter, but if you delete a parameter, you will not receive that
 sends.
 
 .. image:: ./readme_images/sendinblue-3-template-highlighted-params.png
+    :width: 500
+    :alt: Sendinblue email template with params highlighted
+
 
 When you have edited the template how you want, click **Continue** > **Save & Activate** > **Save & Quit**
 (left of Save & Activate).
@@ -859,11 +924,16 @@ When you have edited the template how you want, click **Continue** > **Save & Ac
 its ID is 1:
 
 .. image:: ./readme_images/sendinblue-3-template-contrib-1.png
+    :width: 800
+    :alt: Sendinblue page with Contrib form ID visible
+
 
 3. Now to set the ID of 1 for our Contrib form, from the administrative menu of the locally hosted blog site, go to
 **Forms** > **Contrib Form**. Change the ID from 0 to 1.
 
 .. image:: ./readme_images/localserver-9-contrib-form-manage-id.png
+    :width: 800
+    :alt: Setting the contrib form ID
 
 
 Testing the Contrib form
@@ -872,17 +942,25 @@ Testing the Contrib form
 1. Now on the public-facing Contribute page (<site_url>/contrib/), fill out and submit the form.
 
 .. image:: ./readme_images/localserver-10-enter-contrib-form.png
+    :width: 700
+    :alt: Filling out the contrib form
+
 
 2. Check the inbox of the account that you set as your email recipient on the blog. Hopefully
 you will receive an email that looks similar to this one shortly:
 
 .. image:: ./readme_images/inbox-1-received-contrib-data.png
+    :width: 600
+    :alt: Received email
+
 
 Note: If the sender is showing up as "Ryan's Reflections", you will want to edit your template. From the **Templates**
 screen on Sendinblue, click **Edit** on your template, and then select **Setup** and change the setup information to
 what you want:
 
 .. image:: ./readme_images/sendinblue-4-edit-setup.png
+    :width: 800
+    :alt: Edit Sendinblue setup
 
 
 Shared Form & Newsletter Email Templates
@@ -931,12 +1009,23 @@ One basic style modification that I recommend is changing the green accent color
 color is set in the root class as ``--clr-brand-green`` and a slightly darker green color used for when buttons are hovered
 over is defined by ``--clr-brand-green-hover``. These properties are set in the main stylesheet (<S3bucket>/css/style.css).
 Rather than refactor the names, which would not only require you to do so in the CSS file but in the many different HTML
-templates as well, simply change the actual color values to whatever colors you prefer.
+templates as well, simply change the actual color values to whatever colors you prefer. Just make sure to use the HSL format
+(e.g., 28, 84%, 53%). I've noticed that the degree symbol on the first number does not get parsed correctly so don't use it.
 
 .. image:: ./readme_images/style-1-accent-color.png
+    :width: 800
+    :alt: Timeline page with orange accent color
+
 
 Above: What the timeline page looks like when ``--clr-brand-green`` is set to `28, 84%, 53%` in the main `style.css` file.
 
+1
+Administering the Site
+----------------------
+
+Due to my lack of endless free time, I have not yet documented the site administration. If you would like to set up this blog
+project but want to know more about how to use the administrative views to manage your content and users, contact me at
+haasrr@etsu.edu.
 
 
 Deployment
