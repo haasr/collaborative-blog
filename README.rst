@@ -1019,7 +1019,7 @@ templates as well, simply change the actual color values to whatever colors you 
 
 Above: What the timeline page looks like when ``--clr-brand-green`` is set to `28, 84%, 53%` in the main `style.css` file.
 
-1
+
 Administering the Site
 ----------------------
 
