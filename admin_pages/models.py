@@ -272,8 +272,35 @@ class SEO(models.Model):
     meta_keywords    = models.CharField(max_length=3000)
     meta_author      = models.CharField(max_length=100)
 
-    robots_index  = models.BooleanField(default=True)
-    robots_follow = models.BooleanField(default=True)
+    robots_index  = models.BooleanField(
+        default=True,
+        help_text='See https://moz.com/learn/seo/robots-meta-directives'
+    )
+
+    robots_follow = models.BooleanField(
+        default=True,
+        help_text='See https://moz.com/learn/seo/robots-meta-directives'
+    )
+
+    robots_index_str  = models.CharField(max_length=7, default='index')
+    robots_follow_str = models.CharField(max_length=8, default='follow')
+
+    google_analytics_script = models.CharField(max_length=2200, default='')
+    hotjar_script           = models.CharField(max_length=2200, default='')
+
+    def save(self, *args, **kwargs):
+        if self.robots_index:
+            self.robots_index_str = 'index'
+        else:
+            self.robots_index_str ='noindex'
+        
+        if self.robots_follow:
+            self.robots_follow_str = 'follow'
+        else:
+            self.robots_follow_str = 'nofollow'
+        
+        super(SEO, self).save(*args, **kwargs)
+        
 
 
 class EmailAccount(models.Model):

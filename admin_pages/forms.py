@@ -957,11 +957,31 @@ class SEOForm(forms.ModelForm):
         required=False,
     )
 
+    google_analytics_script = forms.CharField(
+        label='Google Analytics Script',
+        required=False,
+        widget=forms.Textarea(attrs={
+            'rows': '5',
+            'cols': '40',
+        }),
+        help_text='Your Google Analytics tracking code.'
+    )
+
+    hotjar_script = forms.CharField(
+        label='Hotjar Script',
+        required=False,
+        widget=forms.Textarea(attrs={
+            'rows': '5',
+            'cols': '40',
+        })
+    )
+
     class Meta:
         model = SEO
         fields = [
             'meta_title', 'meta_description', 'meta_keywords', 'meta_author',
-            'robots_index', 'robots_follow'
+            'robots_index', 'robots_follow', 'google_analytics_script',
+            'hotjar_script',
         ]
 
     def __init__(self, *args, **kwargs):

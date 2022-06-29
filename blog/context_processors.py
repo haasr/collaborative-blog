@@ -23,8 +23,10 @@ def add_to_context(request):
         'meta_description': seo.meta_description,
         'meta_author': seo.meta_author,
         'meta_keywords': seo.meta_keywords,
-        'robots_index': seo.robots_index,
-        'robots_follow': seo.robots_follow,
+        'robots_index': seo.robots_index_str,
+        'robots_follow': seo.robots_follow_str,
+        'google_analytics_script': seo.google_analytics_script,
+        'hotjar_script': seo.hotjar_script,
 
         'email_contact_form': EmailContactForm(),
         'email_contact_form_settings': emailcontactform_settings,
