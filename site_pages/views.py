@@ -440,16 +440,18 @@ def timeline(request):
     if sitelook.show_timeline:
         years_qset = Post.objects.filter(visibility='public').dates('og_date', 'year')
         years = [ ]
-        if len(years_qset) > 1:
-            for i, date in enumerate(years_qset): # Limits to two years per dimension (row)
-                if (i+1)%2 != 0:
-                    row = [ date.year ]
-                else:
-                    row.append(date.year)
-                    years.append(row)
-        else: # If 1 year.
-            row = [ years_qset[0].year ]
-            years.append(row)
+
+        if len(years_qset) > 0:
+            if len(years_qset) > 1:
+                for i, date in enumerate(years_qset): # Limits to two years per dimension (row)
+                    if (i+1)%2 != 0:
+                        row = [ date.year ]
+                    else:
+                        row.append(date.year)
+                        years.append(row)
+            else: # If 1 year.
+                row = [ years_qset[0].year ]
+                years.append(row)
 
         context = {
             'months': MONTHS,
@@ -457,7 +459,6 @@ def timeline(request):
         }
 
         response = render(request, 'site_pages/timeline.html', context)
-
         return response
     else:
         return HttpResponseRedirect(reverse('index'))
