@@ -295,7 +295,7 @@ all other user accounts, an email denylist for spammers, and configure SEO.
 That means a user without superuser or staff permission could be designated as
 a "regular" user who has some type of profile access that does not allow them
 to manage posts or other more elevated privelege. You could use a similar method
-to my register method found in the ``users.views`` module, omitting, the ``is_staff``
+to my register method found in the ``users.views`` module, omitting the ``is_staff``
 assignment. At this point, I would consider using groups to designate types of
 users to make permissions easier to assign and revoke (you might have 3 types
 of users but one day you might have 4, then 5, so future-proofing is never bad).
@@ -338,7 +338,7 @@ Resetting 2FA
 Users can always reset their own 2FA from their own account settings through
 ``Account Settings`` > ``User Account`` > ``2FA Settings`` > ``Reset Two-Factor Authentication``.
 After that is done, they are immediately asked to configure a new 2FA method before they
-can get back into the staff side of the site. Of course there is an obvious problem here.
+can get back into the staff side of the site. Of course there is an obvious problem here:
 If a user cannot *use* their 2FA method anymore, they cannot finish logging in to reset it
 (a common example in my institution is when a user gets a new phone, haphazardly thinking
 that their OTP codes will magically transfer to their new phone, which is an understandable
@@ -353,13 +353,16 @@ to **instruct users to save these tokens** after setting up their accounts.
 Desired Improvement
 *******************
 
-TL;DR: I will probably improve the capability of resetting 2FA by giving admins the ability
-to reset 2FA on behalf of users **verbally** requesting it. In order to avoid undermining
-security, admins will need to verify two pieces of personal information, again, **verbally**,
-before fulfilling the request for 2FA reset (to securely confirm identity). The personal
-information will not be mandatory to store on the site with the condition that admins will
-only be able to do a reset contingent on there being personal information for a user that
-can be verified.
+**TL;DR**:
++-----------------------------------------------------------------------------------------------+
+| I will probably improve the capability of resetting 2FA by giving admins the ability          |
+| to reset 2FA on behalf of users **verbally** requesting it. In order to avoid undermining     |
+| security, admins will need to verify two pieces of personal information, again, **verbally**, |
+| before fulfilling the request for 2FA reset (to securely confirm identity). The personal      |
+| information will not be mandatory to store on the site with the condition that admins will    |
+| only be able to do a reset contingent on there being personal information for a user that     |
+| can be verified.                                                                              |
++-----------------------------------------------------------------------------------------------+
 
 The current 2FA setup is workable, but it still is not quite ready for institutional use,
 to me, because the user can still be locked out of their account (if they don't have access
