@@ -143,7 +143,7 @@ print('If you mess up, just break out with Ctrl-C and restart the script.')
 input('Enter to continue...')
 
 print('\n###### Create initial admin account ######')
-print('You must create an initial admin account\nto log into <hostname>/accounts/login/\n')
+print('You must create an initial admin account\nto log into <hostname>/account/login/\n')
 fname  = input('  First Name: ')
 lname  = input('  Last Name:  ')
 mail   = input('  Email:      ')
@@ -168,7 +168,7 @@ a.save()
 
 print('\n###### Specify site name & domain ######')
 site_name = input("  Your site's name: ")
-domain    = input("  Your domain (e.g., yourblog.com, don't need https:// or wwww prefix): ")
+domain    = input("  Your domain (e.g., yourblog.com, don't include https:// or wwww prefix): ")
 
 site = Site(id=1, domain=domain, name=site_name)
 site.save()
