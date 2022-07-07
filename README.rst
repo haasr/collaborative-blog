@@ -353,7 +353,6 @@ to **instruct users to save these tokens** after setting up their accounts.
 Desired Improvement
 *******************
 
------------------------------------------------------------------------------------------------
 **TL;DR**:
 
 I will probably improve the capability of resetting 2FA by giving admins the ability
@@ -363,7 +362,7 @@ before fulfilling the request for 2FA reset (to securely confirm identity). The 
 information will not be mandatory to store on the site with the condition that admins will
 only be able to do a reset contingent on there being personal information for a user that
 can be verified.
------------------------------------------------------------------------------------------------
+
 
 The current 2FA setup is workable, but it still is not quite ready for institutional use,
 to me, because the user can still be locked out of their account (if they don't have access
