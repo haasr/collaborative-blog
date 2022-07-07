@@ -353,8 +353,9 @@ to **instruct users to save these tokens** after setting up their accounts.
 Desired Improvement
 *******************
 
-**TL;DR**:
 -----------------------------------------------------------------------------------------------
+**TL;DR**:
+
 I will probably improve the capability of resetting 2FA by giving admins the ability
 to reset 2FA on behalf of users **verbally** requesting it. In order to avoid undermining
 security, admins will need to verify two pieces of personal information, again, **verbally**,
