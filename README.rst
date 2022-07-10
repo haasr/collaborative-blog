@@ -3,7 +3,10 @@ collaborative-blog
 *******************
 
 Collaborative Django blog app with built-in CMS.
-Example site: https://ryansreflections.herokuapp.com/
+
+Example sites: 
+https://ryansreflections.herokuapp.com/
+https://littlelearnersresources.com/
 
 .. image:: ./readme_images/showcase-1-home.png
     :width: 800
@@ -177,8 +180,8 @@ Heroku without breaking the ability to schedule newsletter options through the
 administrative GUI.
 
 While I expect the newsletter feature to work consistently on ordinary web servers,
-I have yet to test it outside of my local environment. I plan to deploy an
-implementation of this web app on an Ubuntu web server where I will employ the
+I have yet to test it outside of my local environment. I have recently deployed an
+implementation of this web app on an Ubuntu web server where I have employed the
 newsletter feature which should allow me to assess the scheduler's viability and
 make changes, if needed.
 
