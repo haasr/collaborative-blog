@@ -21,11 +21,11 @@
 
 <body>
 <nav class="navbar navbar-expand-md navbar-light static-top bg-white">
-  <div class="container">
+  <div class="d-flex">
     <a class="navbar-brand" href="{% url 'index' %}">
       {% load static %}
       <img src="{% static 'site_pages/site_look/nav_image/nav_image.png' %}"
-        alt="Navigation icon" style="{{ navigation_img_size }}">
+        alt="Navigation icon" style="{{ navigation_img_size }} align-self: center;">
     </a>
   </div>
 </nav>
