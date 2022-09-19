@@ -493,6 +493,13 @@ To deactivate it (when you want to use your user Python environment), simply typ
 Heroku Postgres Database Setup
 ------------------------------
 
+Heroku: Free Tier Ending Soon
+*****************************
+
+Unfortunately, Heroku has recently announced that free Dynos and Heroku Postgres databases will no
+longer be available starting on November 28, 2022. These will need to be upgraded to avoid disruption
+and deletion of the free-tier services.
+
 Create the database
 *******************
 
