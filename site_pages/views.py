@@ -182,7 +182,7 @@ def post_comment_new_thread(request, post_slug):
     post_slug = post.slug
     
     if request.method != 'POST':
-        if request.user:
+        if request.user.id:
             author = AuthorProfile.objects.get(user=request.user)
             comment.name = author.preferred_name
 
@@ -228,7 +228,7 @@ def post_comment_existing_thread(request, post_slug, thread_id):
     comment = Comment(post_id=thread.post.id)
     
     if request.method != 'POST':
-        if request.user:
+        if request.user.id:
             author = AuthorProfile.objects.get(user=request.user)
             comment.name = author.preferred_name
 
