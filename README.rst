@@ -726,7 +726,6 @@ S3 bucket. To do that we will need to install the Python package, ``awscli``:
 
     cd S3
     aws s3 cp . s3://example-bucket/ --recursive
-    :alt: 
 
 
 Just be sure to replace `example-bucket` with the name of your S3 bucket.
