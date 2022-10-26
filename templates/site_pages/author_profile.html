@@ -1,6 +1,7 @@
 {% extends "./site_pages_base.html" %}
 {% load static %}
 {% load texttransform %}
+{% load i18n %}
 
 {% block page_title %}{{ profile.preferred_name }}{% endblock page_title %}
 
@@ -35,7 +36,7 @@
 
     <div class="container" style="max-width: 1000px;">
         <div class="content-container container-color-neutral shadow">
-            <h2 style="text-align: center;">Recent Posts</h2>
+            <h2 style="text-align: center;">{% trans "Recent Posts" %}</h2>
         </div>
         {% for post in posts %}
         <div class="content-container container-color-neutral" style="padding-top: 1%;">
@@ -86,7 +87,7 @@
                     <div class="d-flex justify-content-center" style="margin-top: 1rem;">
                         <a href="{% url 'post' post.slug %}">
                             <button class="btn bttn-outline-brand-green shadow-sm">
-                                Read More
+                                {% trans "Read More" %}
                             </button>
                         </a>
                     </div>
