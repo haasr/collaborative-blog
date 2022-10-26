@@ -1,7 +1,8 @@
 {% extends "./site_pages_base.html" %}
 {% load static %}
+{% load i18n %}
 
-{% block page_title %}Contribute{% endblock page_title %}
+{% block page_title %}{% trans "Contribute" %}{% endblock page_title %}
 
 {% block more_links %}
 <link rel="stylesheet" type="text/css" href="{% static 'css/forms.css' %}">
@@ -15,7 +16,7 @@
     <div class="header-image" style="background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.2)), url('{% static header_img_static %}');">
     {% endwith %}
         <div class="hero-text-header text-center">
-            <h1 class="text-light textshadow">Contribute</h1>
+            <h1 class="text-light textshadow">{% trans "Contribute" %}</h1>
             {% if contrib.header_text != '' %}
             <h4 class="header-text justify-content-center text-light">
                 {{ contrib.header_text }}
@@ -25,7 +26,7 @@
     </div>
     {% else %}
     <div class="center-container pad-container">
-        <h1 class="title-container text-center">Contribute</h1>
+        <h1 class="title-container text-center">{% trans "Contribute" %}</h1>
         {% if contrib.header_text != '' %}
         <h4 class="text-center" style="margin-top: 2%;">
             {{ contrib.header_text }}
@@ -51,7 +52,7 @@
                 <br>
                 <div class="center text-center">
                     <button class="btn bttn-brand-green" style="padding-left: 10%; padding-right: 10%;"
-                        onclick="submitContribForm('{{ csrf_token }}');">Submit
+                        onclick="submitContribForm('{{ csrf_token }}');">{% trans "Submit" %}
                     </button>
                 </div>
             </div>
