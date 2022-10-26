@@ -1,7 +1,8 @@
 {% extends "./site_pages_base.html" %}
 {% load static %}
+{% load i18n %}
 
-{% block page_title %}About{% endblock page_title %}
+{% block page_title %}{% trans "About" %} {% endblock page_title %}
 
 {% block content %}
 <div class="content-container-md-clear border-brand-green mt-4 mb-4 shadow">
@@ -10,7 +11,7 @@
     <div class="header-image" style="background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.2)), url('{% static header_img_static %}');">
     {% endwith %}
         <div class="hero-text-header text-center">
-            <h1 class="text-light textshadow">About</h1>
+            <h1 class="text-light textshadow">{% trans "About" %} </h1>
             {% if about.header_text != '' %}
             <h4 class="header-text justify-content-center text-light">
                 {{ about.header_text }}
@@ -20,7 +21,7 @@
     </div>
     {% else %}
     <div class="center-container pad-container">
-        <h1 class="title-container text-center">About</h1>
+        <h1 class="title-container text-center">{% trans "About" %} </h1>
         {% if about.header_text != '' %}
         <h4 class="text-center" style="margin-top: 2%;">
             {{ about.header_text }}
