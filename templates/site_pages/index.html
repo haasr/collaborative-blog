@@ -1,8 +1,9 @@
 {% extends "./site_pages_base.html" %}
 {% load static %}
 {% load texttransform %}
+{% load i18n %}
 
-{% block page_title %}Homepage{% endblock page_title %}
+{% block page_title %}{% trans "Homepage" %}{% endblock page_title %}
 
 {% block content %}
 {% if home.alert_banner != '' %}
@@ -91,7 +92,7 @@
 <div class="featured-container border-brand-green shadow mt-4">
     <div class="mt-4" id="featured">
         <div class="content-container container-color-neutral shadow">
-            <h2>Featured Posts</h2>
+            <h2>{% trans "Featured Posts" %} </h2>
         </div>
         {% for post in featured_posts %}
         <div class="content-container lightly-pad-container container-color-neutral featured-post" id="post-{{ post.id }}" style="display: none;">
@@ -142,7 +143,7 @@
                     <div class="d-flex justify-content-center" style="margin-top: 1rem;">
                         <a href="{% url 'post' post.slug %}">
                             <button class="btn bttn-outline-brand-green shadow-sm">
-                                Read More
+                               {% trans  "Read More" %}
                             </button>
                         </a>
                     </div>
@@ -153,7 +154,7 @@
     </div>
 
     <div class="content-container container-color-neutral shadow mt-4" style="border-bottom: 3px solid rgba(234, 234, 234, 0.8);">
-        <h2 style="text-align: center;">Recent Posts</h2>
+        <h2 style="text-align: center;">{% trans "Recent Posts" %}</h2>
     </div>
     {% for post in posts %}
     <div class="content-container lightly-pad-container container-color-neutral">
@@ -207,7 +208,7 @@
                 <div class="d-flex justify-content-center" style="margin-top: 1rem;">
                     <a href="{% url 'post' post.slug %}">
                         <button class="btn bttn-outline-brand-green shadow-sm">
-                            Read More
+                            {% trans "Read More" %}
                         </button>
                     </a>
                 </div>
