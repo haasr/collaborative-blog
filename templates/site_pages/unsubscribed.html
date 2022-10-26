@@ -1,13 +1,14 @@
 {% extends "./site_pages_base.html" %}
 {% load static %}
+{% load i18n %}  
 
-{% block page_title %}Unsubscribed{% endblock page_title %}
+{% block page_title %}{% trans "Unsubscribed" %}{% endblock page_title %}
 
 {% block content %}
 {% load crispy_forms_tags %}
 <div class="content-container-md-clear border-brand-green mt-4 mb-4 shadow">
     <div class="center-container pad-container fs-450 text-center">
-        You have unsubscribed from our newsletters.
+        {% trans "You have unsubscribed from our newsletters." %}
     </div>
 </div>
 {% endblock content %}
