@@ -1,7 +1,8 @@
 {% extends "./site_pages_base.html" %}
 {% load static %}
+{% load i18n %}  
 
-{% block page_title %}Topics{% endblock page_title %}
+{% block page_title %}{% trans "Topics" %}{% endblock page_title %}
 
 {% block content %}
 <div class="content-container-md-clear border-brand-green shadow mt-4 mb-4">
@@ -10,7 +11,7 @@
     <div class="header-image" style="background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('{% static topics_img_static %}');">
     {% endwith %}
         <div class="hero-text-header text-center">
-            <h1 class="text-light textshadow">Topics</h1>
+            <h1 class="text-light textshadow">{% trans "Topics" %}</h1>
             {% if topics_header.header_text != '' %}
             <h4 class="header-text justify-content-center text-light">
                 {{ topics_header.header_text }}
@@ -31,7 +32,7 @@
     <div class="row" id="topics-list">
         <div class="col-md" style="max-width: 1000px; padding: 2em;">
             <div class="lightly-pad-container bg-front-neutral border-dotted-brand-green">
-                <span class="title-bolder">Featured Topics</span>
+                <span class="title-bolder">{% trans "Featured Topics" %}</span>
                 {% for topic in topics %}
                 {% if topic.is_featured %}
                 {% if topic.splash_img_file_name != '' %}
@@ -67,7 +68,7 @@
             <div class="lightly-pad-container bg-front-neutral border-dotted-brand-green">
                 <div class="d-flex">
                     <span class="title">A-Z&ensp;</span>
-                    <label class="sr-only" for="topics-search">Search topic by name</label>
+                    <label class="sr-only" for="topics-search">{% trans "Search topic by name" %}</label>
                     <input id="topics-search" type="text" class="search" placeholder="Search topic" style="width: 176px;">
                 </div>
                 <ul class="list" style="margin-top: 6px; list-style: none;">

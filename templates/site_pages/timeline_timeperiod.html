@@ -1,6 +1,7 @@
 {% extends "./site_pages_base.html" %}
 {% load static %}
 {% load texttransform %}
+{% load i18n %}  
 
 {% block page_title %}{{ pagetitle }}{% endblock page_title %}
 
@@ -62,7 +63,7 @@
                         <div class="d-flex justify-content-center" style="margin-top: 1rem;">
                             <a href="{% url 'post' post.slug %}">
                                 <button class="btn bttn-outline-brand-green shadow-sm">
-                                    Read More
+                                   {% trans "Read More" %}
                                 </button>
                             </a>
                         </div>
@@ -74,12 +75,12 @@
 
         <div class="col-xs" style="min-width: 320px; max-width: 500px; padding: 2em;">
             <div class="lightly-pad-container bg-front-neutral border-dotted-brand-green">
-                <span class="title text-align-center" style="margin-bottom: 12px;">Posts A-Z</span>
+                <span class="title text-align-center" style="margin-bottom: 12px;">{% trans "Posts A-Z" %}</span>
                 <div class="d-flex justify-content-center">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16" height="36" class="bi bi-search pl-1 pr-1" width="30">
                         <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
                     </svg>
-                    <label class="sr-only" for="timeline-posts-search">Search Post by title, date, or author</label>
+                    <label class="sr-only" for="timeline-posts-search">{% trans "Search Post by title, date, or author" %}</label>
                     <input id="timeline-posts-search" type="text" class="search" placeholder="Search by title, date, author">
                 </div>
                 <ul class="list" style="margin-top: 6px; list-style: none;">

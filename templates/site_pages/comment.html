@@ -1,7 +1,7 @@
 {% extends "./site_pages_base.html" %}
 {% load static %}
-
-{% block page_title %}Comment{% endblock page_title %}
+{% load i18n %}
+{% block page_title %}{% trans "Comment" %} {% endblock page_title %}
 
 {% block more_links %}
 <link rel="stylesheet" type="text/css" href="{% static 'css/forms.css' %}">
@@ -12,7 +12,7 @@
 <div class="container">
 	<div class="container-sm flow mt-4">
 		<div class="lightly-pad-container shadow text-break text-center">
-			<div class="text-center title-container"><h2>Comment</h2></div>
+			<div class="text-center title-container"><h2>{% trans "Comment" %}</h2></div>
 			<div class="form-container">
 				<form method='post'>
 					{% crispy form %}
@@ -21,10 +21,10 @@
 							&nbsp;
 						</div>
 						<div class="col-25" style="text-align: left;">
-							<button class="btn btn-primary" type="submit">Save</button>
+							<button class="btn btn-primary" type="submit">{% trans "Save" %}</button>
 						</div>
 						<div class="col-25" style="text-align: left;">
-							<a href="/post/{{ post_slug }}#post_comments"><button class="btn btn-danger">Cancel</button></a>
+							<a href="/post/{{ post_slug }}#post_comments"><button class="btn btn-danger">{%trans "Cancel" %}</button></a>
 						</div>
 					</div>
 				</form>

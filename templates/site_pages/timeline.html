@@ -1,13 +1,14 @@
 {% extends "./site_pages_base.html" %}
 {% load static %}
 {% load blogqueries %}
+{% load i18n %}  
 
-{% block page_title %}Timeline{% endblock page_title %}
+{% block page_title %}{% trans "Timeline" %}{% endblock page_title %}
 
 {% block content %}
 <div class="content-container-md-clear mt-4">
     <div class="center bg-brand-green shadow p-3" style="border-top-left-radius: 5px; border-top-right-radius: 5px;">
-        <h1 class="text-white text-center">Timeline</h1>
+        <h1 class="text-white text-center">{% trans "Timeline" %}</h1>
     </div>
     <div class="center border-brand-green shadow" style="border-bottom-left-radius: 5px; border-bottom-right-radius: 5px;">
         <div class="content-container-sm-clear bg-front-neutral pt-3">
@@ -17,9 +18,12 @@
                     <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
                     <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
                 </svg>
-                &nbsp;Timeline reflects the years and months in which each
+                &nbsp;
+                {% blocktrans %}
+                Timeline reflects the years and months in which each
                 post was first created. Click linked years or months to view
                 posts first created during those periods.
+                {% endblocktrans %}
             </p>
         </div>
         {% for year_row in years %}
